@@ -9,10 +9,10 @@ const DB_NAME = process.env.DB_NAME;
 
 const db_connection = mysql
     .createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'Dp87@4kan-24mysql',
-        database: 'groupomania'
+        host: `${DB_HOST}`,
+        user: `${DB_USER}`,
+        password: `${DB_PASSWORD}`,
+        database: `${DB_NAME}`
     })
     .on('error', (err) => {
         console.log("Connexion à la base de donnée échouée - ", err);
