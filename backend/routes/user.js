@@ -6,13 +6,13 @@ const {body} = require('express-validator');
 const userCtrl = require('../controllers/user');
 const auth = require('../middleware/auth');
 
-router.post('/signup',[
-    body('Prenom', "Le prénom doit faire au moins 3 caractères")
+router.post('/signup', [
+    body('firstName', "Le prénom doit faire au moins 3 caractères")
         .notEmpty()
         .escape()
         .trim()
         .isLength({ min: 3 }),
-    body('Nom', "Le nom doit faire au moins 3 caractères")
+    body('lastName', "Le nom doit faire au moins 3 caractères")
         .notEmpty()
         .escape()
         .trim()
@@ -25,7 +25,7 @@ router.post('/signup',[
         .notEmpty()
         .trim()
         .isLength({ min: 6 }),
-],userCtrl.signup);
+], userCtrl.signup);
 
 router.post('/login', [
     body('email', "Adresse email invalide")
@@ -38,6 +38,11 @@ router.post('/login', [
         .isLength({ min: 6 }),
 ], userCtrl.login); 
 
-router.get('/getuser/', auth, userCtrl.getUser);
+router.get('/getuser/:id', auth, userCtrl.getUserById);
+
+router.get('/findAll', auth, userCtrl.findAll);
+
+router.get('/findOne', auth, userCtrl.findOne);
+
 
 module.exports = router;
