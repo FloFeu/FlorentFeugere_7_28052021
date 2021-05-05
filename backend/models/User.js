@@ -1,6 +1,5 @@
 "use strict";
 
-const conn = require('../config/db.config').promise();
 const executeSql = require('../services/db');
 
 module.exports = class User {
@@ -14,6 +13,7 @@ module.exports = class User {
 
     constructor(user = null) {
         if (user != null) {
+            if (user.userId) this.userId = user.userId;
             if (user.firstName) this.firstName = user.firstName;
             if (user.lastName) this.lastName = user.lastName;
             if (user.email) this.email = user.email;
@@ -35,16 +35,35 @@ module.exports = class User {
     };
 
     findOneByMail() {
-        const sql = `SELECT * FROM users WHERE email='${this.email}';`
+        const sql = `SELECT * FROM users WHERE email='${this.email}'`;
         console.log(sql);
         return executeSql(sql);
     };
+
+    findOneById() {
+        const sql = `SELECT * FROM users WHERE userId="${this.userId}"`;
+        console.log(sql);
+        return executeSql(sql);
+    }
 
     findByName() {
         const sql = `SELECT userId, firstName, lastName FROM users where firstName='${this.firstName}' OR lastName='${this.lastName}'`;
         console.log(sql);
         return executeSql(sql);
+    };
+
+    modifyOne() {
+        const sql = `UPDATE users SET bio="${this.bio}" WHERE userId="${this.userId}"`;
+        console.log(sql);
+        return executeSql(sql);
+    };
+
+    deleteOne() {
+        const sql = `DELETE FROM users WHERE userId="${this.userId}"`;
+        console.log(sql);
+        return executeSql(sql);
     }
+
 };
 
 

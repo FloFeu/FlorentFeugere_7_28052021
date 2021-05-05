@@ -46,65 +46,14 @@ exports.signup = (req, res, next) => {
     }
 };
 
-exports.getUserById = async (req, res, next) => {
-    try {
-        const [row] = await conn.execute(
-            "SELECT * FROM `users` WHERE `userId`=?",
-            [req.params.id]
-        );
-
-        if (row.length === 0) {
-            return res.status(404).json({
-                message: 'Utilisateur non trouvé !'
-            });
-        }
-
-        res.status(200).json({
-            user: row[0]
-        });
-
-    } catch (err) {
-        next(err);
-    }
-}
-
-exports.findAll = (req, res, next) => {
-    let user = new User();
-    user.findAll()
-        .then( ([rows, fields]) => {
-            res.status(200).json(rows)
-        })
-        .catch((err) => {
-            res.status(400).json({ error })
-        })
-}
-
-exports.findOne = (req, res, next) => {
-    let user = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName
-    });
-    
-    user.findByName()
-        .then( ([ users, fields ]) =>{
-            console.log(users);
-            if (users.length === 0) {
-                return res.status(401).json({ error: 'Aucun utilisateur n\'a été trouvé' })
-            }
-            res.status(200).json({ users })
-        })
-        .catch(err => res.status(400).json({ message: error })) 
-};
-
-
 exports.login = (req, res, next) => {
     let user = new User({
         email: req.body.email,
         password: req.body.password
     });
-    
+
     user.findOneByMail()
-        .then( ([rows, fields]) =>{
+        .then(([rows, fields]) => {
             console.log(rows)
             if (rows.length === 0) {
                 return res.status(401).json({ error: `Utilisateur non trouvé: ${req.body.email} !` })
@@ -118,13 +67,99 @@ exports.login = (req, res, next) => {
                         {
                             userId: rows[0].userId,
                             token: jwt.sign(
-                                { userId: rows[0].userId },
+                                { 
+                                    userId: rows[0].userId,
+                                    isAdmin: rows[0].isAdmin
+                                },
                                 process.env.TOKEN,
                                 { expiresIn: '12h' }
                             )
                         });
                 })
-                .catch(error => res.status(500).json({ message : error }))
+                .catch(error => res.status(500).json({ message: error }))
         })
-       .catch(error => res.status(500).json({ message: error }));
+        .catch(error => res.status(500).json({ message: error }));
 }
+
+exports.findAll = (req, res, next) => {
+    let user = new User();
+    user.findAll()
+        .then(([rows, fields]) => {
+            res.status(200).json(rows)
+        })
+        .catch((err) => {
+            res.status(400).json({ error })
+        })
+}
+
+exports.findOneByName = (req, res, next) => {
+    let user = new User({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName
+    });
+
+    user.findByName()
+        .then(([users, fields]) => {
+            console.log(users);
+            if (users.length === 0) {
+                return res.status(401).json({ error: 'Aucun utilisateur n\'a été trouvé' })
+            }
+            res.status(200).json({ users })
+        })
+        .catch(err => res.status(400).json({ message: error }))
+};
+
+exports.findOneById = (req, res, next) => {
+    let user = new User({
+        userId: req.params.id
+    });
+
+    user.findOneById()
+        .then(([user, fields]) => {
+            console.log(user);
+            if (user.length === 0) {
+                return res.status(401).json({ error: 'Aucune utilisateur n\'a été trouvé !' })
+            }
+            res.status(200).json({ user })
+        })
+        .catch(error => res.status(400).json({ error }));
+};
+
+exports.modifyOne = (req, res, next) => {
+    let user = new User({
+        userId: req.params.id,
+        email: req.body.email,
+        bio: req.body.bio,
+    });
+
+    user.findOneById()
+        .then(([users, fields]) => {
+            console.log(users);
+            if (user.length === 0) {
+                return res.status(401).json({ error: 'Aucune utilisateur n\'a été trouvé !' })
+            }
+            user.modifyOne()
+                .then(() => res.status(200).json({ message: 'Les changements ont été appliqués.' }))
+                .catch(err => res.status(400).json({ error }));
+        })
+        .catch(error => res.status(400).json({ error }));
+};
+
+exports.deleteOne = (req, res, next) => {
+    let user = new User({
+        userId: req.params.id
+    });
+
+    user.findOneById()
+        .then(([users, fields]) => {
+            console.log(users);
+            if (user.length === 0) {
+                return res.status(401).json({ error: 'Aucune utilisateur n\'a été trouvé !' })
+            }
+            user.deleteOne()
+                .then(() => res.status(200).json({ message: 'Utilisateur correctement supprimé.' }))
+                .catch(error => res.status(400).json({ error }));
+        })
+        .catch(error => res.status(400).json({ error }));
+
+};

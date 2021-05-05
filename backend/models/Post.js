@@ -1,6 +1,5 @@
 "use strict";
 
-const conn = require('../config/db.config').promise();
 const executeSql = require('../services/db');
 
 module.exports = class Post {

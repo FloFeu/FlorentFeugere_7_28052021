@@ -6,6 +6,8 @@ const {body} = require('express-validator');
 const userCtrl = require('../controllers/user');
 const auth = require('../middleware/auth');
 
+//localhost:3000/api/auth/...
+
 router.post('/signup', [
     body('firstName', "Le prénom doit faire au moins 3 caractères")
         .notEmpty()
@@ -38,11 +40,11 @@ router.post('/login', [
         .isLength({ min: 6 }),
 ], userCtrl.login); 
 
-router.get('/getuser/:id', auth, userCtrl.getUserById);
-
-router.get('/findAll', auth, userCtrl.findAll);
-
-router.get('/findOne', auth, userCtrl.findOne);
+router.get('/users', auth, userCtrl.findAll);
+router.post('/users', auth, userCtrl.findOneByName);
+router.get('/users/:id', auth, userCtrl.findOneById);
+router.put('/users/:id', auth, userCtrl.modifyOne);
+router.delete('/users/:id', auth, userCtrl.deleteOne);
 
 
 module.exports = router;
