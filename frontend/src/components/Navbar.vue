@@ -1,7 +1,11 @@
 <template>
   <div id="nav">
-    <a href="index.html"><img src="@/assets/logo_white.svg" alt="logo" /></a>
-    <router-link to="/"> Accueil </router-link>
+    <router-link :to="{ name: 'Connect' }"
+      ><img src="@/assets/logo_white.svg" alt="logo"
+    /></router-link>
+    <ul>
+      <router-link :to="{ name: 'Home' }"> Accueil </router-link>
+    </ul>
   </div>
 </template>
 
@@ -16,10 +20,10 @@ export default defineComponent({
 <style scoped lang="scss">
 @import "@/assets/sass/main";
 #nav {
-  background-color: black;
+  background-color: $black;
   margin: 0;
-  padding: 2em;
-  color: white;
+  padding: 1em;
+  color: $white;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,10 +35,10 @@ export default defineComponent({
     transition: border, background-color 100ms;
     &:hover {
       cursor: pointer;
-      border: 1px solid $secondary-color;
+      border: 1px solid $primary-color;
       border-radius: 25px;
       padding: 6px;
-      background-color: $secondary-color;
+      background-color: $primary-color;
     }
   }
   a {
@@ -43,11 +47,11 @@ export default defineComponent({
     font-weight: 700;
     font-size: 20px;
     &:hover {
-      color: $secondary-color;
+      color: $primary-color;
     }
   }
   a.router-link-exact-active {
-    border-bottom: 3px solid $secondary-color;
+    border-bottom: 3px solid $primary-color;
   }
 }
 </style>

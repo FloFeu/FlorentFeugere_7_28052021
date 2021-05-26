@@ -1,4 +1,16 @@
-$black: #111111;
+$black: #242526;
 $white: #FFF;
+$background: #18191A;
+$surface: #353535;
 
-$secondary-color: #820AF3
+$primary-color: #BB86FC;
+$secondary-color: #028192;
+$error: #CF6679;
+
+@mixin line-break {
+        align-items: center;
+        border-bottom: 1px solid #dadde1;
+        display: flex;
+        margin: 20px 16px;
+        text-align: center;
+};

@@ -22,7 +22,7 @@ passwordPattern
 
 exports.signup = (req, res, next) => {
     const errors = validationResult(req);
-
+    
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
@@ -65,6 +65,7 @@ exports.login = (req, res, next) => {
                     }
                     res.status(200).json(
                         {
+                            firstName: rows[0].firstName,
                             userId: rows[0].userId,
                             token: jwt.sign(
                                 { 

@@ -14,7 +14,7 @@ export default defineComponent({
   name: "Connect",
   components: {
     Signin,
-  }
+  },
 });
 </script>
 

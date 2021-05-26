@@ -2,7 +2,6 @@
   <Navbar />
 
   <router-view />
-
 </template>
 
 <script>
@@ -13,7 +12,6 @@ export default defineComponent({
   name: "App",
   components: {
     Navbar,
-
   },
 });
 </script>
@@ -23,9 +21,11 @@ export default defineComponent({
 @import "@/assets/sass/main";
 
 body {
-  background-color: $white;
+  background-color: $background;
+  margin: 0;
 }
 * {
+  color: $white;
   font-family: Roboto;
   text-align: center;
 }

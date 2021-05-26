@@ -26,7 +26,9 @@
 
     <div class="line-break"></div>
 
-    <router-link class="signin__button" to="/signup">INSCRIPTION</router-link>
+    <router-link class="signin__button" :to="{ name: 'Signup' }"
+      >INSCRIPTION</router-link
+    >
   </form>
   <router-view />
 </template>
@@ -48,8 +50,7 @@ export default defineComponent({
   width: 400px;
   margin: 0 auto;
   padding: 30px;
-  border: 1px solid #f1f1f1;
-  background: #fff;
+  background: $black;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
   h2 {
     width: 38%;
@@ -63,11 +64,12 @@ export default defineComponent({
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid $surface;
     box-sizing: border-box;
+    color: $black;
   }
   input[type="submit"] {
-    background-color: $secondary-color;
+    background-color: $primary-color;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -78,15 +80,11 @@ export default defineComponent({
       background-color: white;
       color: $black;
       font-weight: 700;
-      border: 1px solid $secondary-color;
+      border: 1px solid $primary-color;
     }
   }
   .line-break {
-    align-items: center;
-    border-bottom: 1px solid #dadde1;
-    display: flex;
-    margin: 20px 16px;
-    text-align: center;
+    @include line-break;
   }
   .signin__button {
     font-size: 13px;
@@ -94,7 +92,7 @@ export default defineComponent({
     padding: 14px 0;
     border: none;
     display: inline-block;
-    background-color: green;
+    background-color: $secondary-color;
     text-decoration: none;
     color: $white;
     &:hover {
