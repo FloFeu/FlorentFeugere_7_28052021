@@ -9,15 +9,17 @@ export default defineComponent({
   name: "Profile",
   data() {
     return {
-      users: [{
-        userId: 1,
-        firstName: "Florent",
-        lastName: "Feugère",
-        bio: "Pas grand chose à dire, j'aime pas discuter.",
-        avatar: "@/assets/img/itsame.jpg"
-      }]
+      users: [
+        {
+          userId: 1,
+          firstName: "Florent",
+          lastName: "Feugère",
+          bio: "Pas grand chose à dire, j'aime pas discuter.",
+          avatar: "@/assets/img/itsame.jpg",
+        },
+      ],
     };
-  }
+  },
 });
 </script>
 

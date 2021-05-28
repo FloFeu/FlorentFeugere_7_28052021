@@ -7,7 +7,10 @@
         <p>Aujourd'hui, à 9:35</p>
       </div>
     </router-link>
-    <router-link :to="{ name: 'Post', params: { postId: post.postId}}" class="post__msg">
+    <router-link
+      :to="{ name: 'Post', params: { postId: post.postId } }"
+      class="post__msg"
+    >
       {{ post.msg }}
     </router-link>
     <p class="line-break"></p>
@@ -98,7 +101,7 @@ export default {
     &:hover {
       cursor: pointer;
       color: $primary-color;
-      .icon path{
+      .icon path {
         fill: $primary-color;
       }
     }

@@ -30,15 +30,13 @@ export default {
           firstName: "Florent",
           lastName: "Feugère",
           postDate: "Ajd à 20:43",
-          msg:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc a sem scelerisque, tempor sapien lobortis, sagittis neque. In purus justo, pellentesque et tincidunt id, scelerisque a augue. Phasellus iaculis mi non lectus suscipit, nec venenatis proin.",
+          msg: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc a sem scelerisque, tempor sapien lobortis, sagittis neque. In purus justo, pellentesque et tincidunt id, scelerisque a augue. Phasellus iaculis mi non lectus suscipit, nec venenatis proin.",
         },
         {
           postId: 2,
           firstName: "Zaza",
           lastName: "Youpi",
-          msg:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc a sem scelerisque, tempor sapien lobortis, sagittis neque. In purus justo, pellentesque et tincidunt id, scelerisque a augue. Phasellus iaculis mi non lectus suscipit, nec venenatis proin.",
+          msg: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc a sem scelerisque, tempor sapien lobortis, sagittis neque. In purus justo, pellentesque et tincidunt id, scelerisque a augue. Phasellus iaculis mi non lectus suscipit, nec venenatis proin.",
         },
       ],
     };

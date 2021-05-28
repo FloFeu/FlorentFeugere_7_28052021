@@ -1,7 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import Connect from "@/views/Connect.vue";
-import Signin from "@/components/Signin.vue";
-import Signup from "@/components/Signup.vue";
+import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
 import Profile from "@/views/Profile.vue";
 import PostDetails from "@/views/PostDetails.vue";
@@ -9,18 +7,8 @@ import PostDetails from "@/views/PostDetails.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Connect",
-    component: Connect,
-  },
-  {
-    path: "/signin",
-    name: "Signin",
-    component: Signin,
-  },
-  {
-    path: "/signup",
-    name: "Signup",
-    component: Signup,
+    name: "Login",
+    component: Login,
   },
   {
     path: "/home",
