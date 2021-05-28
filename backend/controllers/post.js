@@ -18,7 +18,7 @@ exports.createPost = (req, res, next) => {
             if (reqUserId) {
                 const post = new Post({
                     msg: req.body.msg,
-                    postAttachment: req.body.postAttachment,
+                    postAttachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
                     userId: reqUserId
                 });
 

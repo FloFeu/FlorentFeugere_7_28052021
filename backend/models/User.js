@@ -10,6 +10,7 @@ module.exports = class User {
     password = '';
     bio = '';
     isAdmin = 0;
+    avatar = '';
 
     constructor(user = null) {
         if (user != null) {
@@ -20,11 +21,12 @@ module.exports = class User {
             if (user.password) this.password = user.password;
             if (user.bio) this.bio = user.bio;
             if (user.isAdmin) this.isAdmin = user.isAdmin;
+            if (user.avatar) this.avatar = user.avatar;
         }
     };
 
     add() {
-        const sql = `INSERT INTO users (userId, firstName, lastName, email, password, bio, isAdmin) VALUES(NULL, "${this.firstName}", "${this.lastName}", "${this.email}", "${this.password}", "${this.bio}","${this.isAdmin}")`;
+        const sql = `INSERT INTO users (userId, firstName, lastName, email, password, bio, isAdmin, avatar) VALUES(NULL, "${this.firstName}", "${this.lastName}", "${this.email}", "${this.password}", "${this.bio}","${this.isAdmin}" ,"${this.avatar}")`;
         console.log(sql);
         return executeSql(sql);
     };

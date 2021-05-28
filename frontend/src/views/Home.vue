@@ -26,14 +26,15 @@ export default {
     return {
       posts: [
         {
-          id: 1,
+          postId: 1,
           firstName: "Florent",
           lastName: "Feugère",
+          postDate: "Ajd à 20:43",
           msg:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc a sem scelerisque, tempor sapien lobortis, sagittis neque. In purus justo, pellentesque et tincidunt id, scelerisque a augue. Phasellus iaculis mi non lectus suscipit, nec venenatis proin.",
         },
         {
-          id: 2,
+          postId: 2,
           firstName: "Zaza",
           lastName: "Youpi",
           msg:

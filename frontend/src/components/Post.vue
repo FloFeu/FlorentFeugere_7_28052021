@@ -1,25 +1,22 @@
 <template>
   <div class="post">
-    <div class="post__user">
-      <img
-        src="@/assets/img/itsame.jpg"
-        alt="user avatar"
-        class="post__user--img"
-      />
+    <router-link to="#" class="post__user">
+      <img src="@/assets/img/itsame.jpg" alt="avatar" class="post__user--img" />
       <div class="post__user--info">
-        <a href="#"> {{ post.firstName + ' ' + post.lastName }} </a>
+        <b>{{ post.firstName + " " + post.lastName }} </b>
         <p>Aujourd'hui, à 9:35</p>
       </div>
-    </div>
-    <p class="post__msg">
+    </router-link>
+    <router-link :to="{ name: 'Post', params: { postId: post.postId}}" class="post__msg">
       {{ post.msg }}
-    </p>
+    </router-link>
     <p class="line-break"></p>
     <p class="post__icon--like">
       <font-awesome-icon class="icon" :icon="['fas', 'thumbs-up']" />
     </p>
     <p class="post__icon--comment">
       <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
+      Commenter ce post
     </p>
   </div>
 </template>
@@ -53,6 +50,7 @@ export default {
     grid-area: img;
     display: flex;
     align-items: center;
+    text-decoration: none;
     &--img {
       border-radius: 50%;
       width: 100px;
@@ -61,13 +59,12 @@ export default {
       object-position: top;
       padding: 1em;
     }
-    &--info{
-      a{
+    &--info {
+      b {
         font-size: 1.3em;
         font-weight: 700;
-        text-decoration: none;
       }
-      p{
+      p {
         margin-top: 5px;
         font-size: 14px;
         text-align: left;
@@ -78,6 +75,7 @@ export default {
   &__msg {
     grid-area: msg;
     font-size: 1.1em;
+    text-decoration: none;
   }
   .line-break {
     grid-area: br;
@@ -85,6 +83,8 @@ export default {
   &__icon--like {
     grid-area: like;
     .icon {
+      path {
+      }
       &:hover {
         cursor: pointer;
         path {
@@ -95,13 +95,11 @@ export default {
   }
   &__icon--comment {
     grid-area: comment;
-
-    .icon {
-      &:hover {
-        cursor: pointer;
-        path {
-          fill: $primary-color;
-        }
+    &:hover {
+      cursor: pointer;
+      color: $primary-color;
+      .icon path{
+        fill: $primary-color;
       }
     }
   }

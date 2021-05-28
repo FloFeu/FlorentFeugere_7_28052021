@@ -11,11 +11,11 @@ const conn = require('../config/db.config').promise();
 
 let passwordPattern = new passwordValidator();
 passwordPattern
-    .is().min(6)
-    .is().max(100)
+    .is().min(8)
+    .is().max(15)
     .has().uppercase()
     .has().lowercase()
-    .has().digits(2)
+    .has().digits(1)
     .has().symbols(1)
     .has().not().spaces()
     .is().not().oneOf(['Passw0rd', 'Password1234', 'P@ssW0rd']);

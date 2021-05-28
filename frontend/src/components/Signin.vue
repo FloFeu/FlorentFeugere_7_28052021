@@ -102,5 +102,15 @@ export default defineComponent({
       font-weight: 700;
     }
   }
+  .form__error {
+    color: $error;
+    & ul {
+      padding: 0;
+    }
+    & li {
+      list-style: none;
+      color: $error;
+    }
+  }
 }
 </style>
