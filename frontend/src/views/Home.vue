@@ -1,45 +1,149 @@
 <template>
-  <div class="home">
-    <div class="home__nav">
-      <p>Salut</p>
-      <p>Salut</p>
+  <div>
+    <Navbar />
+    <div class="home">
+      <div class="home__infos">
+        <h2>Bonjour {{ user.firstName }}</h2>
+        <div class="create__post">
+          <label for="post">Partagez vos pensées:</label>
+          <textarea
+            name="post"
+            id="post"
+            cols="30"
+            rows="10"
+            placeholder="..."
+            v-model="msg"
+          ></textarea>
+          <div
+            v-if="previewImage"
+            class="imagePreviewWrapper"
+            :style="{ 'background-image': `url(${previewImage})` }"
+            @click="selectImage"
+          >
+            <button @click="deleteFile">
+              <font-awesome-icon class="icon" :icon="['fas', 'trash']" />
+            </button>
+          </div>
+          <div class="file">
+            <label class="add__file" for="post__file">Ajouter un fichier</label>
+            <input
+              type="file"
+              id="post__file"
+              name="image"
+              @change="onFileSelected"
+            />
+          </div>
+          <button @click="onUpload">
+            <span v-if="status == 'loading'"> Envoi du post...</span>
+            <span v-else-if="status == 'created'">
+              Post créé avec succès !</span
+            >
+            <span v-else> Créer un post.</span>
+          </button>
+        </div>
+      </div>
+      <div class="home__main">
+        <h1>Fil d'actualité</h1>
+        <div class="line-break"></div>
+        <Post v-for="post in posts" :key="post.id" :post="post" />
+      </div>
     </div>
-    <div class="home__main">
-      <h1>Fil d'actualité</h1>
-      <div class="line-break"></div>
-
-      <Post v-for="post in posts" :key="post.id" :post="post" />
-    </div>
-    <div class="home__sidebar"></div>
   </div>
 </template>
 
 <script>
 import Post from "@/components/Post.vue";
+import Navbar from "@/components/Navbar.vue";
+import axios from "axios";
+import { mapState } from "vuex";
 
 export default {
   name: "Home",
   components: {
     Post,
+    Navbar,
+  },
+  props: {
+    post: {
+      type: Object,
+      required: true,
+    }
   },
   data() {
     return {
-      posts: [
-        {
-          postId: 1,
-          firstName: "Florent",
-          lastName: "Feugère",
-          postDate: "Ajd à 20:43",
-          msg: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc a sem scelerisque, tempor sapien lobortis, sagittis neque. In purus justo, pellentesque et tincidunt id, scelerisque a augue. Phasellus iaculis mi non lectus suscipit, nec venenatis proin.",
-        },
-        {
-          postId: 2,
-          firstName: "Zaza",
-          lastName: "Youpi",
-          msg: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc a sem scelerisque, tempor sapien lobortis, sagittis neque. In purus justo, pellentesque et tincidunt id, scelerisque a augue. Phasellus iaculis mi non lectus suscipit, nec venenatis proin.",
-        },
-      ],
+      msg: "",
+      selectedFile: null,
+      previewImage: null,
     };
+  },
+  methods: {
+    onFileSelected(event) {
+      this.selectedFile = event.target.files[0];
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewImage = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+      console.log(this.selectedFile);
+    },
+    getPosts() {
+      this.$store
+        .dispatch("getPosts")
+        .then((response) => {
+          console.log(response);
+          this.posts = this.$store.state.posts;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    onUpload() {
+      this.$store
+        .dispatch("createPost", {
+          selectedFile: this.selectedFile,
+          msg: this.msg,
+          userId: this.$store.state.userInfos.userId,
+        })
+        .then((response) => {
+          console.log(response);
+          this.getPosts();
+          return (
+            (this.selectedFile = null),
+            (this.msg = ""),
+            (this.previewImage = null)
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deleteFile() {
+      console.log(this.selectedFile);
+      return (this.selectedFile = null), (this.previewImage = null);
+    },
+    checkUser() {
+      console.log(this.$store.state.userInfos);
+    },
+  },
+  created() {
+    this.$store
+      .dispatch("getUserInfos")
+      .then(() => {
+        (this.user.firstName = this.$store.state.userInfos.firstName),
+        (this.user.lastName = this.$store.state.userInfos.lastName);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log(this.$store.state.userInfos);
+    this.getPosts();
+  },
+  computed: {
+    ...mapState({
+      user: "userInfos",
+    }),
+    ...mapState(["status"]),
+    ...mapState(["posts"]),
   },
 };
 </script>
@@ -47,29 +151,88 @@ export default {
 <style lang="scss">
 @import "@/assets/sass/main";
 .home {
-  margin: 4em auto;
+  margin: 1em;
   display: grid;
   grid-template:
-    "nav main sidebar"
-    "nav main sidebar"
-    "nav main sidebar";
-  grid-template-columns: 1fr 4fr 1fr;
+    "nav"
+    "main"
+    "main";
+  grid-template-columns: 4fr;
   grid-column-gap: 1em;
-  &__nav {
+  &__infos {
     grid-area: nav;
-    background-color: $white;
+    background-color: $background;
+
+    .create__post {
+      margin: 1em 0;
+      background-color: $surface;
+      border: none;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      padding: 1em;
+      label {
+        margin-bottom: 10px;
+      }
+      textarea {
+        height: 3em;
+        border-radius: 15px;
+        padding: 10px;
+        resize: none;
+        color: $black;
+        &:focus {
+          height: 100px;
+        }
+      }
+      .imagePreviewWrapper {
+        width: 250px;
+        height: 250px;
+        display: block;
+        cursor: pointer;
+        margin: 1em auto;
+        background-size: cover;
+        background-position: center center;
+        position: relative;
+        button {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+      }
+      .file {
+        padding: 1em;
+        text-align: center;
+        .add__file {
+          cursor: pointer;
+          font-weight: 700;
+          &:hover {
+            color: $primary-color;
+          }
+        }
+        #post__file {
+          display: none;
+        }
+      }
+      button {
+        background-color: $background;
+        padding: 0.4em;
+        border-radius: 15px;
+        border: none;
+      }
+    }
   }
   &__main {
     grid-area: main;
+    height: 100%;
     background-color: $black;
+    border-radius: 16px;
     color: $white;
     .line-break {
       @include line-break;
     }
-  }
-  &__sidebar {
-    grid-area: sidebar;
-    background-color: $error;
+    h1 {
+      padding: 0 1rem;
+    }
   }
 }
 </style>

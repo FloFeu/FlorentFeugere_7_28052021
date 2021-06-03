@@ -50,12 +50,12 @@
     <div class="form-row" v-if="mode == 'create' && status == 'error_create'">
       Adresse mail déjà utilisée.
     </div>
-    <div class="form-row__instructions " v-if="mode == 'create' && focus">
-      Votre mot de passe doit contenir 8 à 15 caractères, au moins une majuscule, un chiffre et un caractère spécial ($ @ % * + - _ !)
+    <div class="form-row__instructions" v-if="mode == 'create' && focus">
+      Votre mot de passe doit contenir 8 à 15 caractères, au moins une
+      majuscule, un chiffre et un caractère spécial ($ @ % * + - _ !)
     </div>
     <div class="form-row">
       <button
-        
         @click="login()"
         class="button"
         :class="{ 'button--disabled': !validatedFields }"
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
   name: "Login",
@@ -117,13 +117,13 @@ export default {
         } else {
           return false;
         }
-      };
+      }
     },
-    ...mapState(['status'])
+    ...mapState(["status"]),
   },
   methods: {
     onFocus() {
-      this.focus = !this.focus
+      this.focus = !this.focus;
     },
     switchToCreateAcccount() {
       this.mode = "create";
@@ -132,26 +132,34 @@ export default {
       this.mode = "login";
     },
     createAccount() {
-      this.$store.dispatch("createAccount", {
-        email: this.email,
-        firstName: this.firstName,
-        lastName: this.lastName,
-        password: this.password,
-      }).then(response => {
-        console.log(response);
-      }).catch(error => {
-        console.log(error);
-      });
+      this.$store
+        .dispatch("createAccount", {
+          email: this.email,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          password: this.password,
+        })
+        .then((response) => {
+          this.login();
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     login() {
-      this.$store.dispatch("login", {
-        email: this.email,
-        password: this.password,
-      }).then(response => {
-        console.log(response);
-      }).catch(error => {
-        console.log(error);
-      });
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((response) => {
+          this.$router.push({ name: "Home" });
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
@@ -165,7 +173,7 @@ export default {
   margin: 16px 0px;
   gap: 16px;
   flex-wrap: wrap;
-  &__instructions{
+  &__instructions {
     font-size: 12px;
   }
   &__input {

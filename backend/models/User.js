@@ -55,7 +55,7 @@ module.exports = class User {
     };
 
     modifyOne() {
-        const sql = `UPDATE users SET bio="${this.bio}" WHERE userId="${this.userId}"`;
+        const sql = `UPDATE users SET bio="${this.bio}", avatar="${this.avatar}" WHERE userId="${this.userId}"`;
         console.log(sql);
         return executeSql(sql);
     };

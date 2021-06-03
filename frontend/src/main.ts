@@ -3,11 +3,17 @@ import App from "./App.vue";
 import router from "./router";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-import { faComment } from "@fortawesome/free-solid-svg-icons";
+import {
+  faComment,
+  faBars,
+  faPlusSquare,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import store from "./store";
 
-library.add(faThumbsUp, faComment);
+library.add(faThumbsUp, faComment, faBars, faPlusSquare, faTrash);
 
 createApp(App)
   .use(store)

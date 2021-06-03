@@ -22,7 +22,7 @@ passwordPattern
 
 exports.signup = (req, res, next) => {
     const errors = validationResult(req);
-    
+
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
@@ -34,7 +34,8 @@ exports.signup = (req, res, next) => {
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email: req.body.email,
-                    password: hash
+                    password: hash,
+                    avatar: "http://localhost:3000/images/avatar.png"
                 });
 
                 user.add()
@@ -68,7 +69,7 @@ exports.login = (req, res, next) => {
                             firstName: rows[0].firstName,
                             userId: rows[0].userId,
                             token: jwt.sign(
-                                { 
+                                {
                                     userId: rows[0].userId,
                                     isAdmin: rows[0].isAdmin
                                 },
@@ -121,7 +122,7 @@ exports.findOneById = (req, res, next) => {
             if (user.length === 0) {
                 return res.status(401).json({ error: 'Aucune utilisateur n\'a été trouvé !' })
             }
-            res.status(200).json({ user })
+            res.status(200).json(user[0])
         })
         .catch(error => res.status(400).json({ error }));
 };
@@ -131,6 +132,7 @@ exports.modifyOne = (req, res, next) => {
         userId: req.params.id,
         email: req.body.email,
         bio: req.body.bio,
+        avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
 
     user.findOneById()

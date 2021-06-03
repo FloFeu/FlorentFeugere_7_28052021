@@ -5,33 +5,22 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
 exports.createPost = (req, res, next) => {
-    if (!req.body.msg) {
-        res.status(400).json({ message: 'Votre post est vide.' })
-        res.end();
+    console.log(req)
+    if (!req.files[0] && req.body.msg == '') {
+       return res.status(400).json({ message: "Votre post ne peut être vide." });
+       
     } else {
-        try {
-            const token = req.headers.authorization.split(' ')[1];
-            const decodedToken = jwt.verify(token, process.env.TOKEN);
-            console.log(decodedToken);
-            const reqUserId = decodedToken.userId;
+        const post = new Post({
+            msg: req.body.msg,
+            userId: req.body.userId,
+            postAttachment: req.files[0] ? `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}` : null
+        });
 
-            if (reqUserId) {
-                const post = new Post({
-                    msg: req.body.msg,
-                    postAttachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-                    userId: reqUserId
-                });
-
-                post.add()
-                    .then(() => res.status(201).json({
-                        message: 'Post publié !'
-                    }))
-                    .catch(error => res.status(400).json(error))
-            }
-        }
-        catch (error) {
-            res.status(400).json({ message: 'Requête non authentifiée !' })
-        }
+        post.add()
+            .then(() => res.status(201).json({
+                message: 'Post publié !'
+            }))
+            .catch(error => res.status(400).json(error))
     }
 };
 
@@ -42,7 +31,7 @@ exports.getOnePost = (req, res, next) => {
     });
     console.log(post);
     post.getOne()
-        .then( ([rows, fields ]) => {
+        .then(([rows, fields]) => {
             console.log(rows);
             res.status(201).json(rows[0])
         }).catch(err => {
@@ -53,7 +42,7 @@ exports.getOnePost = (req, res, next) => {
 exports.getAllPosts = (req, res, next) => {
     const post = new Post();
     post.getAll()
-        .then( ([ rows, fields ]) => {
+        .then(([rows, fields]) => {
             res.status(201).json(rows)
         }).catch(err => {
             res.status(400).json({ err })
@@ -66,14 +55,14 @@ exports.getPostsByUser = (req, res, next) => {
     });
 
     post.getAllPostsFromUserId()
-        .then( ([ rows, fields] ) => {
+        .then(([rows, fields]) => {
             res.status(201).json(rows)
         }).catch(err => {
             res.status(400).json({ err })
         })
 };
 
-exports.modifyPost = (req, res, next) =>{
+exports.modifyPost = (req, res, next) => {
     const post = new Post({
         postId: req.params.id,
         msg: req.body.msg,
@@ -81,7 +70,7 @@ exports.modifyPost = (req, res, next) =>{
     });
 
     post.modifyOne()
-        .then(() => res.status(200).json({ message: 'Votre post à bien été modifié.'}))
+        .then(() => res.status(200).json({ message: 'Votre post à bien été modifié.' }))
         .catch(error => res.status(400).json({ error }));
 };
 
@@ -91,6 +80,6 @@ exports.deletePost = (req, res, next) => {
     });
 
     post.deleteOne()
-        .then(() => res.status(200).json({ message: 'Post correctement supprimé'}))
+        .then(() => res.status(200).json({ message: 'Post correctement supprimé' }))
         .catch(error => res.status(400).json({ error }));
 };

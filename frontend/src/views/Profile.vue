@@ -1,26 +1,39 @@
 <template>
-  <User class="profile" v-for="user in users" :key="user.userId" :user="user" />
+  <div>
+    <Navbar />
+
+    <div>
+      Prout
+    </div>
+  </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import Navbar from "@/components/Navbar.vue";
+import { mapState } from "vuex";
 
-export default defineComponent({
+export default {
   name: "Profile",
-  data() {
-    return {
-      users: [
-        {
-          userId: 1,
-          firstName: "Florent",
-          lastName: "Feugère",
-          bio: "Pas grand chose à dire, j'aime pas discuter.",
-          avatar: "@/assets/img/itsame.jpg",
-        },
-      ],
-    };
+  props: ['id'],
+  components: {
+    Navbar,
   },
-});
+  computed: {
+    ...mapState({
+      user: "userInfos",
+    }),
+  },
+  created() {
+    console.log(this.id);
+    this.$store.dispatch('getProfile', this.id)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch(error => {
+      console.log(error);
+    })
+  }
+};
 </script>
 
 <style></style>

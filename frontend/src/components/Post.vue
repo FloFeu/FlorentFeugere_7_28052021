@@ -1,7 +1,11 @@
 <template>
   <div class="post">
-    <router-link to="#" class="post__user">
-      <img src="@/assets/img/itsame.jpg" alt="avatar" class="post__user--img" />
+    <router-link
+      :to="{ name: 'Profile', params: { id: post.userId } }"
+      class="post__user"
+      :user="post.userId"
+    >
+      <img :src="post.avatar" alt="avatar" class="post__user--img" />
       <div class="post__user--info">
         <b>{{ post.firstName + " " + post.lastName }} </b>
         <p>Aujourd'hui, à 9:35</p>
@@ -11,7 +15,8 @@
       :to="{ name: 'Post', params: { postId: post.postId } }"
       class="post__msg"
     >
-      {{ post.msg }}
+      <p>{{ post.msg }}</p>
+      <img :src="post.PostAttachment" alt="" />
     </router-link>
     <p class="line-break"></p>
     <p class="post__icon--like">
@@ -45,7 +50,7 @@ export default {
   display: grid;
   grid-template-areas:
     "img img ."
-    "msg msg msg"
+    ". msg ."
     "br br br"
     ". like comment";
   grid-template-columns: 15% 42.5% 42.5%;
