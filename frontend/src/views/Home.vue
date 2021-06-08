@@ -33,7 +33,7 @@
               @change="onFileSelected"
             />
           </div>
-          <button @click="onUpload">
+          <button @click.prevent="onUpload">
             <span v-if="status == 'loading'"> Envoi du post...</span>
             <span v-else-if="status == 'created'">
               Post créé avec succès !</span
@@ -45,7 +45,14 @@
       <div class="home__main">
         <h1>Fil d'actualité</h1>
         <div class="line-break"></div>
-        <Post v-for="post in posts" :key="post.id" :post="post" />
+        <div v-if="posts.length">
+          <Post v-for="post in posts" :key="post.id" :post="post" />
+        </div>
+        <div v-else>
+          <p>
+            Il n'y a actuellement pas de publications. Créez-en donc une ! :)
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -54,7 +61,6 @@
 <script>
 import Post from "@/components/Post.vue";
 import Navbar from "@/components/Navbar.vue";
-import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
@@ -62,12 +68,6 @@ export default {
   components: {
     Post,
     Navbar,
-  },
-  props: {
-    post: {
-      type: Object,
-      required: true,
-    }
   },
   data() {
     return {
@@ -130,7 +130,7 @@ export default {
       .dispatch("getUserInfos")
       .then(() => {
         (this.user.firstName = this.$store.state.userInfos.firstName),
-        (this.user.lastName = this.$store.state.userInfos.lastName);
+          (this.user.lastName = this.$store.state.userInfos.lastName);
       })
       .catch((error) => {
         console.log(error);
@@ -232,6 +232,10 @@ export default {
     }
     h1 {
       padding: 0 1rem;
+    }
+    p {
+      margin: 2em;
+      text-align: center;
     }
   }
 }

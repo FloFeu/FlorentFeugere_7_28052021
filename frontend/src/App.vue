@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+  <router-view :key="$route.path" />
 </template>
 
 <script>
@@ -26,10 +26,8 @@ body {
 
 // Style cartes Login
 .card {
-  margin: auto;
-  margin-top: 10em;
+  margin: 10em 1em;
   max-width: 100%;
-  width: 540px;
   background: $surface;
   border-radius: 16px;
   padding: 32px;

@@ -37,7 +37,7 @@ module.exports = class Post {
     };
 
     getAllPostsFromUserId() {
-        const sql = `SELECT * FROM posts WHERE userId=${this.userId}`;
+        const sql = `SELECT postId, msg, postDate, PostAttachment, posts.userId, users.userId, firstName, lastName, avatar FROM posts JOIN users ON posts.userId = users.userId WHERE posts.userId=${this.userId} ORDER BY postDate DESC`;
         console.log(sql);
         return executeSql(sql);
     };

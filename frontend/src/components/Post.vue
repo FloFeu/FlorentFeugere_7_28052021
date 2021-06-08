@@ -1,40 +1,66 @@
 <template>
   <div class="post">
-    <router-link
-      :to="{ name: 'Profile', params: { id: post.userId } }"
-      class="post__user"
-      :user="post.userId"
-    >
-      <img :src="post.avatar" alt="avatar" class="post__user--img" />
-      <div class="post__user--info">
+    <div class="post__img">
+      <router-link
+        :to="{ name: 'Profile', params: { id: post.userId } }"
+        :user="post.userId"
+      >
+        <img
+          v-if="post.avatar"
+          :src="post.avatar"
+          alt="avatar"
+          class="post__img--img"
+        />
+        <img
+          v-else
+          src="@/assets/img/icon.png"
+          alt="avatar"
+          class="post__img--img"
+        />
+      </router-link>
+    </div>
+    <div class="post__content">
+      <router-link
+        :to="{ name: 'Profile', params: { id: post.userId } }"
+        class="post__content__info"
+      >
         <b>{{ post.firstName + " " + post.lastName }} </b>
-        <p>Aujourd'hui, à 9:35</p>
+        {{ dateTime(post.postDate) }}
+      </router-link>
+      <router-link
+        :to="{ name: 'PostDetails', params: { id: post.postId } }"
+        class="post__content__msg"
+        :post="post.postId"
+      >
+        <div>
+          <p>{{ post.msg }}</p>
+        </div>
+        <div v-if="post.PostAttachment" class="post__content__msg--attachment">
+          <img :src="post.PostAttachment" alt="attachment" />
+        </div>
+      </router-link>
+      <div class="post__content__icon">
+        <font-awesome-icon class="icon" :icon="['fas', 'thumbs-up']" />
+
+        <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
       </div>
-    </router-link>
-    <router-link
-      :to="{ name: 'Post', params: { postId: post.postId } }"
-      class="post__msg"
-    >
-      <p>{{ post.msg }}</p>
-      <img :src="post.PostAttachment" alt="" />
-    </router-link>
-    <p class="line-break"></p>
-    <p class="post__icon--like">
-      <font-awesome-icon class="icon" :icon="['fas', 'thumbs-up']" />
-    </p>
-    <p class="post__icon--comment">
-      <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
-      Commenter ce post
-    </p>
+    </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
+import moment from "moment";
+
 export default {
   props: {
     post: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    dateTime(value) {
+      return moment(value).locale("fr").calendar();
     },
   },
 };
@@ -43,71 +69,68 @@ export default {
 <style lang="scss">
 @import "@/assets/sass/main";
 .post {
-  border-radius: 15px;
   background-color: $surface;
-  margin: 1em;
-  padding: 1em;
-  display: grid;
-  grid-template-areas:
-    "img img ."
-    ". msg ."
-    "br br br"
-    ". like comment";
-  grid-template-columns: 15% 42.5% 42.5%;
-  &__user {
-    grid-area: img;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
+  border-bottom: 1px solid $background;
+  padding: 15px 0;
+  display: flex;
+  padding-left: 10px;
+  &__img {
+    width: 20%;
     &--img {
       border-radius: 50%;
-      width: 100px;
-      height: 100px;
+      width: 70px;
+      height: 70px;
       object-fit: cover;
       object-position: top;
-      padding: 1em;
     }
-    &--info {
+  }
+  &__content {
+    padding: 0 1em;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    &__info {
+      text-decoration: none;
+      font-size: 12px;
+      text-align: left;
+      color: $primary-color;
       b {
         font-size: 1.3em;
         font-weight: 700;
-      }
-      p {
-        margin-top: 5px;
-        font-size: 14px;
-        text-align: left;
-        color: $primary-color;
+        margin-right: 0.5em;
       }
     }
-  }
-  &__msg {
-    grid-area: msg;
-    font-size: 1.1em;
-    text-decoration: none;
-  }
-  .line-break {
-    grid-area: br;
-  }
-  &__icon--like {
-    grid-area: like;
-    .icon {
-      path {
-      }
-      &:hover {
-        cursor: pointer;
-        path {
-          fill: $primary-color;
+    &__msg {
+      margin: 1em 0;
+      font-size: 1.1em;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      &--attachment {
+        width: 100%;
+        margin-top: 1em;
+        align-self: center;
+        img {
+          border-radius: 15px;
+          border: 1px solid lighten($surface, 25%);
+          width: 100%;
         }
       }
     }
-  }
-  &__icon--comment {
-    grid-area: comment;
-    &:hover {
-      cursor: pointer;
-      color: $primary-color;
-      .icon path {
-        fill: $primary-color;
+    &__icon {
+      padding: 0 2em;
+      display: flex;
+      justify-content: space-between;
+      .icon {
+        path {
+          fill: lighten($surface, 25%);
+        }
+        &:hover {
+          cursor: pointer;
+          path {
+            fill: $primary-color;
+          }
+        }
       }
     }
   }

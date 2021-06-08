@@ -32,6 +32,15 @@ export default createStore({
       userId: "",
     },
     posts: [],
+    profileInfos: {
+      userId: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      bio: "",
+      avatar: "",
+    },
+    profilePosts: [],
   },
   mutations: {
     setStatus(state, status) {
@@ -70,6 +79,12 @@ export default createStore({
     },
     postsFetched(state, posts) {
       state.posts = posts;
+    },
+    userFound(state, profileFound) {
+      state.profileInfos = profileFound;
+    },
+    postsProfileFetched(state, posts) {
+      state.profilePosts = posts;
     },
   },
   actions: {
@@ -130,6 +145,7 @@ export default createStore({
         formData.append("msg", this.state.postInfos.msg);
         formData.append("userId", this.state.postInfos.userId);
       }
+
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
           "BEARER " + this.state.user.token;
@@ -162,6 +178,85 @@ export default createStore({
           console.log(error);
         });
     },
+    getProfile({ commit }, profileId) {
+      return new Promise((resolve, reject) => {
+        instance.defaults.headers.common["Authorization"] =
+          "BEARER " + this.state.user.token;
+        instance
+          .get("/auth/users/" + profileId)
+          .then((response) => {
+            commit("userFound", response.data);
+            console.log(response.data);
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    getProfilePosts({ commit }, profileId) {
+      return new Promise((resolve, reject) => {
+        instance
+          .get("/posts/users/" + profileId)
+          .then((response) => {
+            console.log(response);
+            commit("postsProfileFetched", response.data);
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    modifyProfile({ commit }, newData) {
+      commit("setStatus", "loading");
+      console.log(newData);
+
+      const formData = new FormData();
+      if (!newData.selectedAvatar) {
+        formData.append("firstName", newData.firstName);
+        formData.append("bio", newData.bio);
+        formData.append("currentAvatar", newData.currentAvatar);
+      } else {
+        formData.append("firstName", newData.firstName);
+        formData.append("bio", newData.bio);
+        formData.append("avatar", newData.selectedAvatar);
+        formData.append("currentAvatar", newData.currentAvatar);
+      }
+      console.log(formData);
+
+      return new Promise((resolve, reject) => {
+        instance.defaults.headers.common["Authorization"] =
+          "BEARER " + this.state.user.token;
+        instance.defaults.headers.common["Content-Type"] =
+          "multipart/form-data";
+        instance
+          .put("/auth/users/" + this.state.userInfos.userId, formData)
+          .then((response) => {
+            commit("setStatus", "created");
+            console.log(response);
+            resolve(response.data.message);
+          })
+          .catch((error) => {
+            console.log(error.response.status);
+            reject(error);
+          });
+      });
+    },
+    getOnePost({ commit }, postId) {
+      return new Promise((resolve, reject) => {
+        instance.defaults.headers.common["Authorization"] =
+          "BEARER " + this.state.user.token;
+        instance
+          .get("/posts/" + postId)
+          .then((response) => {
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    }
   },
   getters: {
     isAuthenticated() {

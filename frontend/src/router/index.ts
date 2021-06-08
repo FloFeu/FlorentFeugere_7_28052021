@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
 import Profile from "@/views/Profile.vue";
+import EditProfile from "@/views/EditProfile.vue";
 import PostDetails from "@/views/PostDetails.vue";
 import store from "@/store";
 
@@ -27,8 +28,8 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: authGuard,
   },
   {
-    path: "/post/:postId",
-    name: "Post",
+    path: "/post/:id",
+    name: "PostDetails",
     props: true,
     component: PostDetails,
     beforeEnter: authGuard,
@@ -38,6 +39,12 @@ const routes: Array<RouteRecordRaw> = [
     name: "Profile",
     component: Profile,
     props: true,
+    beforeEnter: authGuard,
+  },
+  {
+    path: "/settings/profile",
+    name: "EditProfile",
+    component: EditProfile,
     beforeEnter: authGuard,
   },
 ];

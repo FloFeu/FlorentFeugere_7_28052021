@@ -5,7 +5,6 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
 exports.createPost = (req, res, next) => {
-    console.log(req)
     if (!req.files[0] && req.body.msg == '') {
        return res.status(400).json({ message: "Votre post ne peut être vide." });
        

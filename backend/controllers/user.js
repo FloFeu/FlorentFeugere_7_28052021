@@ -34,8 +34,7 @@ exports.signup = (req, res, next) => {
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email: req.body.email,
-                    password: hash,
-                    avatar: "http://localhost:3000/images/avatar.png"
+                    password: hash
                 });
 
                 user.add()
@@ -115,7 +114,6 @@ exports.findOneById = (req, res, next) => {
     let user = new User({
         userId: req.params.id
     });
-
     user.findOneById()
         .then(([user, fields]) => {
             console.log(user);
@@ -128,22 +126,24 @@ exports.findOneById = (req, res, next) => {
 };
 
 exports.modifyOne = (req, res, next) => {
+    const newFirstname = req.body.firstName.split(' ').join('_');
     let user = new User({
         userId: req.params.id,
-        email: req.body.email,
+        firstName: newFirstname,
         bio: req.body.bio,
-        avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        avatar: req.files[0] ? `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}` : req.body.currentAvatar
     });
-
+    console.log(user);
     user.findOneById()
         .then(([users, fields]) => {
             console.log(users);
-            if (user.length === 0) {
+            if (users.length === 0) {
                 return res.status(401).json({ error: 'Aucune utilisateur n\'a été trouvé !' })
+            } else {
+                user.modifyOne()
+                    .then(() => res.status(200).json({ message: 'Les changements ont été appliqués.' }))
+                    .catch(err => res.status(400).json({ err }));
             }
-            user.modifyOne()
-                .then(() => res.status(200).json({ message: 'Les changements ont été appliqués.' }))
-                .catch(err => res.status(400).json({ error }));
         })
         .catch(error => res.status(400).json({ error }));
 };

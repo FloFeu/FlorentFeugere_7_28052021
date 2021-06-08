@@ -1,7 +1,7 @@
 <template>
   <nav>
     <router-link :to="{ name: 'Home' }">
-      <img class="logo" src="@/assets/img/logo_white.svg" alt="" />
+      <img class="logo" src="@/assets/img/logo_white.svg" alt="logo" />
     </router-link>
     <ul class="menu__nav">
       <li>
@@ -50,7 +50,7 @@ export default {
 @import "@/assets/sass/main";
 
 nav {
-  padding: 20px;
+  padding: 15px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -61,7 +61,7 @@ nav {
   background-color: $surface;
   border-radius: 0 0 10px 10px;
   .logo {
-    width: 250px;
+    width: 200px;
     border: 1px solid $surface;
     border-radius: 50px;
     padding: 7px 8px;
@@ -76,6 +76,7 @@ nav {
     list-style: none;
     li {
       text-align: right;
+      padding-bottom: 0.3em;
       a,
       p {
         font-size: 16px;

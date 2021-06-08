@@ -1,25 +1,38 @@
 <template>
   <div>
-    Salut
-    <p>{{ post.firstName + " " + post.lastName }}</p>
-    <p>{{ post.postDate }}</p>
+    <router-link :to="{ name: 'Home' }"> Accueil </router-link>
+    {{ post.msg }}
+    {{ post.postId }}
+    {{ dateTime(post.postDate) }}
+    <img :src="post.PostAttachment" alt="" />
   </div>
 </template>
 
 <script>
-import Service from "@/services/Service.js";
+import moment from "moment";
 
 export default {
-  props: ["postId"],
+  name: "PostDetails",
   data() {
     return {
-      post: null,
+      post: {},
     };
   },
+  props: {
+    id: String,
+  },
+  methods: {
+    dateTime(value) {
+      return moment(value).locale("fr").calendar();
+    },
+  },
   created() {
-    Service.getPostDetails(this.postId)
+    this.$store
+      .dispatch("getOnePost", this.id)
       .then((response) => {
-        this.post = response.data;
+        console.log(response);
+        this.post = response;
+        console.log(this.post);
       })
       .catch((error) => {
         console.log(error);
@@ -28,4 +41,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>
