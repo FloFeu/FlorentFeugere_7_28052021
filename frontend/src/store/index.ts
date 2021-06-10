@@ -158,6 +158,9 @@ export default createStore({
             commit("postCreated");
             resolve(response.data.message);
           })
+          .then(() => {
+            commit("setStatus", "");
+          })
           .catch((error) => {
             console.log(error.response.status);
             commit("setStatus", "error_create");
@@ -253,6 +256,42 @@ export default createStore({
             resolve(response.data);
           })
           .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    getComments({ commit }, postId) {
+      return new Promise((resolve, reject) => {
+        instance.defaults.headers.common["Authorization"] =
+          "BEARER " + this.state.user.token;
+        instance
+          .get("/comments/posts/" + postId)
+          .then((response) => {
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    postComment({ commit }, commentInfos) {
+      commit("setStatus", "loading");
+
+      return new Promise((resolve, reject) => {
+        instance.defaults.headers.common["Authorization"] =
+          "BEARER " + this.state.user.token;
+        instance
+          .post("/comments", commentInfos)
+          .then((response) => {
+            commit("setStatus", "created");
+            resolve(response.data.message);
+          })
+          .then(() => {
+            commit("setStatus", "");
+          })
+          .catch((error) => {
+            console.log(error.response.status);
+            commit("setStatus", "error_create");
             reject(error);
           });
       });

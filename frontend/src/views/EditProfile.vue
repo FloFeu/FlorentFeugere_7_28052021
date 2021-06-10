@@ -1,13 +1,7 @@
 <template>
-  <div class="profile editProfile">
-    <div class="profile__header editProfile__header">
-      <router-link :to="{ name: 'Home' }"
-        ><font-awesome-icon
-          class="icon"
-          :icon="['fas', 'arrow-left']"
-          size="2x"
-      /></router-link>
-      <button @click.prevent="modifyProfile">Enregistrer</button>
+  <div>
+    <div class="editProfile">
+      <Nav_second @update="modifyProfile" />
     </div>
     <div class="profile__top editProfile__top">
       <div>
@@ -62,6 +56,7 @@
 </template>
 
 <script>
+import Nav_second from "@/components/Nav_second.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -73,6 +68,9 @@ export default {
       bio: this.$store.state.userInfos.bio,
       previewImage: null,
     };
+  },
+  components: {
+    Nav_second,
   },
   computed: {
     ...mapState({

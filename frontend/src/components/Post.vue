@@ -33,7 +33,7 @@
         :post="post.postId"
       >
         <div>
-          <p>{{ post.msg }}</p>
+          <p class="post__content__msg--msg">{{ post.msg }}</p>
         </div>
         <div v-if="post.PostAttachment" class="post__content__msg--attachment">
           <img :src="post.PostAttachment" alt="attachment" />
@@ -41,8 +41,9 @@
       </router-link>
       <div class="post__content__icon">
         <font-awesome-icon class="icon" :icon="['fas', 'thumbs-up']" />
-
-        <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
+        <router-link :to="{ name: 'PostDetails', params: { id: post.postId } }">
+          <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
+        </router-link>
       </div>
     </div>
   </div>
@@ -106,6 +107,14 @@ export default {
       text-decoration: none;
       display: flex;
       flex-direction: column;
+      text-align: justify;
+      text-justify: inter-word;
+      &--msg {
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
       &--attachment {
         width: 100%;
         margin-top: 1em;

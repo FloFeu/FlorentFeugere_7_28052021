@@ -1,13 +1,6 @@
 <template>
   <div class="profile">
-    <div class="profile__header">
-      <router-link :to="{ name: 'Home' }"
-        ><font-awesome-icon
-          class="icon"
-          :icon="['fas', 'arrow-left']"
-          size="2x"
-      /></router-link>
-    </div>
+    <Nav_second />
     <div class="profile__top">
       <div>
         <img
@@ -44,6 +37,7 @@
 
 <script>
 import Post from "@/components/Post.vue";
+import Nav_second from "@/components/Nav_second.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -62,6 +56,7 @@ export default {
   },
   components: {
     Post,
+    Nav_second,
   },
   computed: {
     ...mapState({
@@ -136,7 +131,7 @@ export default {
     align-items: center;
     &__img {
       margin-left: 1em;
-      margin-top: -2em;
+      margin-top: -1em;
       width: 100px;
       height: 100px;
       background: $background;
@@ -154,10 +149,10 @@ export default {
         color: $primary-color;
         border-radius: 25px;
         padding: 0.7em 2em;
-        &:active{
-        transform: scale(0.9);
-        color: lightgray;
-      }
+        &:active {
+          transform: scale(0.9);
+          color: lightgray;
+        }
       }
     }
   }

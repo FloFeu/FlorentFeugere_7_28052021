@@ -5,9 +5,6 @@
     </router-link>
     <ul class="menu__nav">
       <li>
-        <router-link :to="{ name: 'Home' }"> Accueil </router-link>
-      </li>
-      <li>
         <router-link :to="'/profile/' + user.userId"> Profil </router-link>
       </li>
       <li>

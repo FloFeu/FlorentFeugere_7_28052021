@@ -31,7 +31,7 @@ module.exports = class Post {
     };
 
     getOne() {
-        const sql = `SELECT * FROM posts WHERE postId=${this.postId}`;
+        const sql = `SELECT postId, msg, postDate, postAttachment, posts.userId, users.userId, firstName, lastName, avatar FROM posts JOIN users ON posts.userId = users.userId WHERE postId=${this.postId}`;
         console.log(sql);
         return executeSql(sql);
     };

@@ -10,8 +10,8 @@
             name="post"
             id="post"
             cols="30"
-            rows="10"
-            placeholder="..."
+            rows="3"
+            placeholder="Aujourd'hui il fait bien beau !"
             v-model="msg"
           ></textarea>
           <div
@@ -33,7 +33,10 @@
               @change="onFileSelected"
             />
           </div>
-          <button @click.prevent="onUpload">
+          <button
+            @click.prevent="onUpload"
+            v-if="msg.length | (selectedFile !== null)"
+          >
             <span v-if="status == 'loading'"> Envoi du post...</span>
             <span v-else-if="status == 'created'">
               Post créé avec succès !</span
@@ -49,7 +52,7 @@
           <Post v-for="post in posts" :key="post.id" :post="post" />
         </div>
         <div v-else>
-          <p>
+          <p class="home__main__warn">
             Il n'y a actuellement pas de publications. Créez-en donc une ! :)
           </p>
         </div>
@@ -175,13 +178,16 @@ export default {
         margin-bottom: 10px;
       }
       textarea {
-        height: 3em;
         border-radius: 15px;
+        border: none;
         padding: 10px;
         resize: none;
-        color: $black;
-        &:focus {
-          height: 100px;
+        color: $white;
+        background-color: $surface;
+        font-size: 16px;
+        &::placeholder {
+          color: $primary-color;
+          font-size: 16px;
         }
       }
       .imagePreviewWrapper {
@@ -233,7 +239,7 @@ export default {
     h1 {
       padding: 0 1rem;
     }
-    p {
+    &__warn {
       margin: 2em;
       text-align: center;
     }

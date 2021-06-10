@@ -9,13 +9,21 @@ import {
   faPlusSquare,
   faTrash,
   faArrowLeft,
-  faPlus
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import store from "./store";
 
-library.add(faThumbsUp, faComment, faBars, faPlusSquare, faTrash, faArrowLeft, faPlus);
+library.add(
+  faThumbsUp,
+  faComment,
+  faBars,
+  faPlusSquare,
+  faTrash,
+  faArrowLeft,
+  faPlus
+);
 
 createApp(App)
   .use(store)
