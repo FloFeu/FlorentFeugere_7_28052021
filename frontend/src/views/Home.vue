@@ -49,7 +49,12 @@
         <h1>Fil d'actualité</h1>
         <div class="line-break"></div>
         <div v-if="posts.length">
-          <Post v-for="post in posts" :key="post.id" :post="post" />
+          <Post
+            v-for="post in posts"
+            :key="post.postId"
+            :post="post"
+            @postDeleted="postDeleted"
+          />
         </div>
         <div v-else>
           <p class="home__main__warn">
@@ -80,6 +85,7 @@ export default {
     };
   },
   methods: {
+    // Affichage du fichier sélectionné
     onFileSelected(event) {
       this.selectedFile = event.target.files[0];
       let reader = new FileReader();
@@ -92,14 +98,17 @@ export default {
     getPosts() {
       this.$store
         .dispatch("getPosts")
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           this.posts = this.$store.state.posts;
         })
         .catch((error) => {
           console.log(error);
         });
     },
+    getComments() {
+      this.$store.dispatch("getAllComments");
+    },
+    // Envoi d'un post
     onUpload() {
       this.$store
         .dispatch("createPost", {
@@ -107,8 +116,7 @@ export default {
           msg: this.msg,
           userId: this.$store.state.userInfos.userId,
         })
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           this.getPosts();
           return (
             (this.selectedFile = null),
@@ -121,11 +129,10 @@ export default {
         });
     },
     deleteFile() {
-      console.log(this.selectedFile);
       return (this.selectedFile = null), (this.previewImage = null);
     },
-    checkUser() {
-      console.log(this.$store.state.userInfos);
+    postDeleted() {
+      this.getPosts();
     },
   },
   created() {

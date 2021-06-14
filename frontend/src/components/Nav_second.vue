@@ -27,6 +27,43 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/sass/main";
+.profile {
+  &__header {
+    background-color: $surface;
+    display: flex;
+    align-items: center;
+    a {
+      .icon {
+        width: 2em;
+        path {
+          fill: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+.editProfile {
+  &__header {
+    height: 4em;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 1em;
+    button {
+      background-color: $primary-color;
+      border: none;
+      border-radius: 25px;
+      color: $white;
+      font-weight: 700;
+      padding: 0.7em 2em;
+      &:active {
+        transform: scale(0.9);
+        color: lightgray;
+      }
+    }
+  }
+}
 .sticky {
   position: sticky;
   top: 0;

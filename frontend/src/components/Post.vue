@@ -20,13 +20,20 @@
       </router-link>
     </div>
     <div class="post__content">
-      <router-link
-        :to="{ name: 'Profile', params: { id: post.userId } }"
-        class="post__content__info"
-      >
-        <b>{{ post.firstName + " " + post.lastName }} </b>
-        {{ dateTime(post.postDate) }}
-      </router-link>
+      <div class="post__content__head">
+        <router-link
+          :to="{ name: 'Profile', params: { id: post.userId } }"
+          class="post__content__head__info"
+        >
+          <b>{{ post.firstName + " " + post.lastName }} </b>
+        </router-link>
+        <span v-if="userCheck" @click="togglePopUp">...</span>
+        <PopUp
+          @deletePost="deletePost"
+          :revele="revele"
+          :togglePopUp="togglePopUp"
+        />
+      </div>
       <router-link
         :to="{ name: 'PostDetails', params: { id: post.postId } }"
         class="post__content__msg"
@@ -40,9 +47,11 @@
         </div>
       </router-link>
       <div class="post__content__icon">
+        {{ dateTime(post.postDate) }}
         <font-awesome-icon class="icon" :icon="['fas', 'thumbs-up']" />
         <router-link :to="{ name: 'PostDetails', params: { id: post.postId } }">
           <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
+          <span> {{ post.CommentsNumber }}</span>
         </router-link>
       </div>
     </div>
@@ -51,8 +60,17 @@
 
 <script>
 import moment from "moment";
-
+import PopUp from "@/components/PopUp.vue";
 export default {
+  components: {
+    PopUp,
+  },
+  data() {
+    return {
+      revele: false,
+      userCheck: false,
+    };
+  },
   props: {
     post: {
       type: Object,
@@ -61,9 +79,41 @@ export default {
   },
   methods: {
     dateTime(value) {
-      return moment(value).locale("fr").calendar();
+      return moment(value).locale("fr").fromNow();
     },
+    togglePopUp() {
+      this.revele = !this.revele;
+    },
+    deletePost() {
+      let result = confirm("Êtes-vous sûrs de vouloir supprimer ce post ?");
+      if (result) {
+        if (this.$store.state.userInfos.userId == this.post.userId) {
+          this.$store
+            .dispatch("deletePost", this.post.postId)
+            .then((response) => {
+              console.log(response);
+              this.$emit("postDeleted");
+              this.togglePopUp();
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          this.togglePopUp();
+        }
+      } else {
+        this.togglePopUp();
+      }
+    },
+    checkUser() {
+      if (this.post.userId == sessionStorage.getItem("userId")) {
+        return (this.userCheck = true);
+      }
+    }
   },
+  created() {
+    this.checkUser();
+  }
 };
 </script>
 
@@ -90,15 +140,16 @@ export default {
     width: 80%;
     display: flex;
     flex-direction: column;
-    &__info {
-      text-decoration: none;
-      font-size: 12px;
-      text-align: left;
-      color: $primary-color;
-      b {
-        font-size: 1.3em;
-        font-weight: 700;
-        margin-right: 0.5em;
+    &__head {
+      display: flex;
+      justify-content: space-between;
+      &__info {
+        text-decoration: none;
+        b {
+          font-size: 1.2em;
+          font-weight: 700;
+          margin-right: 0.5em;
+        }
       }
     }
     &__msg {
@@ -127,17 +178,23 @@ export default {
       }
     }
     &__icon {
-      padding: 0 2em;
+      color: $primary-color;
       display: flex;
       justify-content: space-between;
-      .icon {
-        path {
-          fill: lighten($surface, 25%);
+      a {
+        text-decoration: none;
+        span {
+          color: $primary-color;
         }
-        &:hover {
-          cursor: pointer;
+        .icon {
           path {
-            fill: $primary-color;
+            fill: lighten($surface, 25%);
+          }
+          &:hover {
+            cursor: pointer;
+            path {
+              fill: $primary-color;
+            }
           }
         }
       }

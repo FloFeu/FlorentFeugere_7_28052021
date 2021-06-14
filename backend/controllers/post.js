@@ -6,8 +6,8 @@ const jwt = require('jsonwebtoken');
 
 exports.createPost = (req, res, next) => {
     if (!req.files[0] && req.body.msg == '') {
-       return res.status(400).json({ message: "Votre post ne peut être vide." });
-       
+        return res.status(400).json({ message: "Votre post ne peut être vide." });
+
     } else {
         const post = new Post({
             msg: req.body.msg,
@@ -42,7 +42,7 @@ exports.getAllPosts = (req, res, next) => {
     const post = new Post();
     post.getAll()
         .then(([rows, fields]) => {
-            res.status(201).json(rows)
+            res.status(201).json(rows);
         }).catch(err => {
             res.status(400).json({ err })
         });

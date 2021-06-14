@@ -34,11 +34,7 @@
           placeholder="Ajouter un commentaire..."
         />
         <button @click.prevent="postComment" v-if="newComment.length">
-          <span v-if="status == 'loading'"> Envoi du commentaire...</span>
-          <span v-else-if="status == 'created'">
-            Post commenté avec succès !</span
-          >
-          <span v-else> Ajouter un commentaire</span>
+          Ajouter un commentaire
         </button>
       </div>
       <Comment
@@ -76,6 +72,7 @@ export default {
     ...mapState({
       user: "userInfos",
     }),
+    ...mapState({ status }),
   },
   methods: {
     dateTime(value) {
@@ -101,6 +98,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          this.newComment = "";
           this.fetchComments();
         })
         .catch((error) => {

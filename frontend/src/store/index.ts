@@ -181,6 +181,21 @@ export default createStore({
           console.log(error);
         });
     },
+    deletePost({commit}, postId ){
+      
+      return new Promise((resolve, reject) => {
+        instance.defaults.headers.common["Authorization"] =
+          "BEARER " + this.state.user.token;
+        instance
+          .delete("/posts/" + postId)
+          .then((response) => {
+            resolve(response.data)
+          })
+          .catch((error) => {
+            reject(error)
+          });
+      })
+    },
     getProfile({ commit }, profileId) {
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
@@ -246,6 +261,22 @@ export default createStore({
           });
       });
     },
+    deleteProfile( {commit}, profileId) {
+      console.log(profileId);
+      
+      return new Promise((resolve, reject) => {
+        instance.defaults.headers.common["Authorization"] =
+          "BEARER " + this.state.user.token;
+        instance
+          .delete("/auth/users/" + profileId)
+          .then((response) => {
+            resolve(response.data)
+          })
+          .catch((error) => {
+            reject(error)
+          });
+      })
+    },
     getOnePost({ commit }, postId) {
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
@@ -274,24 +305,19 @@ export default createStore({
           });
       });
     },
-    postComment({ commit }, commentInfos) {
-      commit("setStatus", "loading");
-
+    postComment({commit}, commentInfos) {
+      console.log(commentInfos);
+      
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
           "BEARER " + this.state.user.token;
         instance
           .post("/comments", commentInfos)
           .then((response) => {
-            commit("setStatus", "created");
             resolve(response.data.message);
-          })
-          .then(() => {
-            commit("setStatus", "");
           })
           .catch((error) => {
             console.log(error.response.status);
-            commit("setStatus", "error_create");
             reject(error);
           });
       });

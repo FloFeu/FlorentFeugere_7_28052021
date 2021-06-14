@@ -24,6 +24,12 @@ module.exports = class Comment {
         return executeSql(sql);
     };
 
+    incrPost() {
+        const sql = ` UPDATE posts SET CommentsNumber = CommentsNumber + 1 WHERE postId = "${this.postId}";`
+        console.log(sql);
+        return executeSql(sql);
+    };
+
     getAll() {
         const sql = `SELECT commentId, postId, commentDate, comment, comments.userId, users.userId, firstName, lastName, avatar FROM comments JOIN users ON comments.userId = users.userId WHERE postId="${this.postId}" ORDER BY commentDate ASC`;
         console.log(sql);

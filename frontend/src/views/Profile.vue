@@ -106,25 +106,6 @@ export default {
 @import "@/assets/sass/main";
 
 .profile {
-  &__header {
-    height: 6em;
-    background-color: $surface;
-    display: flex;
-    align-items: center;
-    a {
-      .icon {
-        width: 2em;
-        path {
-          fill: $primary-color;
-        }
-      }
-    }
-  }
-  &__nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
   &__top {
     display: flex;
     justify-content: space-between;

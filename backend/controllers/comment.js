@@ -22,59 +22,60 @@ exports.createComment = (req, res, next) => {
                 });
 
                 comment.add()
-                    .then(() => res.status(201).json({ message: 'Commentaire publié ! ' }))
-                    .catch(err => res.status(400).json({ error })) ;
-            };
-        }
+                    .then(() => {
+                        comment.incrPost()
+                            .then(res.status(200).json({ message: 'Commentaire ajouté :' }))
+                    }).catch((error) => res.status(401).json({ error }))
+            }}
         catch (error) {
-            res.status(400).json({ error })
+                res.status(400).json({ error })
+            }
         }
-    }
 };
 
-exports.getComments = (req, res, next) => {
-    const comment = new Comment({
-        postId: req.params.id
-    });
-
-    comment.getAll()
-        .then(([comments, fields]) => {
-            res.status(201).json(comments)
-        }).catch(err => {
-            res.status(400).json({ err })
+    exports.getComments = (req, res, next) => {
+        const comment = new Comment({
+            postId: req.params.id
         });
-};
 
-exports.modifyComment = (req, res, next) => {
-    const comment = new Comment({
-        commentId: req.params.id,
-        commentMsg: req.body.commentMsg
-    })
+        comment.getAll()
+            .then(([comments, fields]) => {
+                res.status(201).json(comments)
+            }).catch(err => {
+                res.status(400).json({ err })
+            });
+    };
 
-    comment.findOne()
-        .then(([rows, fields]) => {
-            if (rows.length === 0) {
-                return res.status(401).json({ error: 'Commentaire introuvable !' })
-            }
-            comment.modifyOne()
-                .then(() => {
-                    res.status(200).json({ message: 'Commentaire correctement modifié.' })
-                }).catch(err => res.status(400).json({ error }));
+    exports.modifyComment = (req, res, next) => {
+        const comment = new Comment({
+            commentId: req.params.id,
+            commentMsg: req.body.commentMsg
         })
-};
 
-exports.deleteComment = (req, res, next) => {
-    const comment = new Comment({
-        commentId: req.params.id
-    })
+        comment.findOne()
+            .then(([rows, fields]) => {
+                if (rows.length === 0) {
+                    return res.status(401).json({ error: 'Commentaire introuvable !' })
+                }
+                comment.modifyOne()
+                    .then(() => {
+                        res.status(200).json({ message: 'Commentaire correctement modifié.' })
+                    }).catch(err => res.status(400).json({ error }));
+            })
+    };
 
-    comment.findOne()
-        .then(([rows, fields]) => {
-            if (rows.length === 0) {
-                return res.status(401).json({ error: 'Commentaire introuvable !' })
-            }
-            comment.deleteOne()
-                .then(() => res.status(200).json({ message: 'Commentaire correctement supprimé.' }))
-                .catch(err => res.status(400).json({ error }));
+    exports.deleteComment = (req, res, next) => {
+        const comment = new Comment({
+            commentId: req.params.id
         })
-}
+
+        comment.findOne()
+            .then(([rows, fields]) => {
+                if (rows.length === 0) {
+                    return res.status(401).json({ error: 'Commentaire introuvable !' })
+                }
+                comment.deleteOne()
+                    .then(() => res.status(200).json({ message: 'Commentaire correctement supprimé.' }))
+                    .catch(err => res.status(400).json({ error }));
+            })
+    }

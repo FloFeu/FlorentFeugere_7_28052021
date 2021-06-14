@@ -6,33 +6,35 @@
     <div class="profile__top editProfile__top">
       <div>
         <label for="edit__file" class="editProfile__top__file">
-          <img
-            v-if="user.avatar"
-            :src="user.avatar"
-            alt="avatar"
-            class="profile__top__img editProfile__top__file__img"
-          />
+          <div v-if="!previewImage">
+            <img
+              v-if="user.avatar"
+              :src="user.avatar"
+              alt="avatar"
+              class="profile__top__img editProfile__top__file__img"
+            />
+
+            <img
+              v-else
+              src="@/assets/img/icon.png"
+              alt="avatar"
+              class="profile__top__img editProfile__top__file__img"
+            />
+            <span>
+              <font-awesome-icon
+                class="icon editProfile__top__file__labelImg"
+                size="2x"
+                :icon="['fas', 'plus']"
+            /></span>
+          </div>
           <div
-            v-else-if="previewImage"
+            v-else
             :style="{
               'background-image': `url(${previewImage})`,
               'background-size': '100px',
             }"
-            alt="avatar"
             class="profile__top__img editProfile__top__file__img"
           ></div>
-          <img
-            v-else
-            src="@/assets/img/icon.png"
-            alt="avatar"
-            class="profile__top__img editProfile__top__file__img"
-          />
-          <span>
-            <font-awesome-icon
-              class="icon editProfile__top__file__labelImg"
-              size="2x"
-              :icon="['fas', 'plus']"
-          /></span>
         </label>
         <input
           type="file"
@@ -51,6 +53,12 @@
         <p>Bio</p>
         <input type="text" v-model="bio" />
       </div>
+      <span class="line-break"></span>
+    </div>
+    <div class="editProfile__delete">
+      <button class="editProfile__delete__btn" @click="deleteValidation">
+        Suppression du compte
+      </button>
     </div>
   </div>
 </template>
@@ -89,6 +97,7 @@ export default {
       };
       reader.readAsDataURL(this.selectedAvatar);
       console.log(this.selectedAvatar);
+      console.log(this.previewImage);
     },
     modifyProfile() {
       let editData = {};
@@ -116,6 +125,23 @@ export default {
           console.log(error);
         });
     },
+    deleteValidation() {
+      let result = confirm(
+        "Êtes-vous sûrs de vouloir supprimer votre compte ?"
+      );
+      if (result) {
+        this.$store
+          .dispatch("deleteProfile", this.user.userId)
+          .then((response) => {
+            console.log(response);
+            this.$store.commit("logOut");
+            this.$router.push({ name: "Login" });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
   },
 };
 </script>
@@ -123,32 +149,13 @@ export default {
 <style lang="scss">
 @import "@/assets/sass/main";
 .editProfile {
-  &__header {
-    height: 4em;
-    display: flex;
-    justify-content: space-between;
-    padding-right: 1em;
-    button {
-      background-color: $primary-color;
-      border: none;
-      border-radius: 25px;
-      color: $white;
-      font-weight: 700;
-      padding: 0.7em 2em;
-      &:active {
-        transform: scale(0.9);
-        color: lightgray;
-      }
-    }
-  }
   &__top {
     &__file {
       position: relative;
       &__labelImg {
         position: absolute;
-        left: 52px;
-        top: -50px;
-        opacity: 0.5;
+        top: 20px;
+        left: 50px;
         path {
           fill: $surface;
         }
@@ -158,6 +165,7 @@ export default {
       }
     }
     #edit__file {
+      display: none;
     }
   }
   &__fields {
@@ -177,14 +185,20 @@ export default {
         color: $white;
       }
     }
+    .line-break {
+      @include line-break;
+    }
   }
-}
-#edit__file {
-  display: none;
-}
-input {
-  color: black;
-}
-.edit__file__labelImg {
+  &__delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__btn {
+      border: none;
+      border-radius: 25px;
+      background-color: $error;
+      padding: 0.7em 2em;
+    }
+  }
 }
 </style>
