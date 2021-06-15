@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const {body} = require('express-validator');
 const userCtrl = require('../controllers/user');
+const postCtrl = require('../controllers/post');
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 
@@ -49,3 +50,4 @@ router.delete('/users/:id', auth, userCtrl.deleteOne);
 
 
 module.exports = router;
+

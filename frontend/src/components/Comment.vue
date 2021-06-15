@@ -8,12 +8,18 @@
         <p class="comment__content__header__username">
           {{ comment.firstName + " " + comment.lastName }}
         </p>
-        <p class="comment__content__header__datetime">
-          {{ dateTime(comment.commentDate) }}
-        </p>
+        <span v-if="userCheck" @click="togglePopUp">...</span>
+        <PopUp
+          :revele="revele"
+          :togglePopUp="togglePopUp"
+          @deletePost="deleteComment(comment.commentId)"
+        />
       </div>
       <div class="comment__content__body">
         <p>{{ comment.comment }}</p>
+        <p class="comment__content__body__datetime">
+          {{ dateTime(comment.commentDate) }}
+        </p>
       </div>
     </div>
   </div>
@@ -21,19 +27,59 @@
 
 <script>
 import moment from "moment";
+import PopUp from "@/components/PopUp.vue";
 
 export default {
   name: "Comment",
+  data() {
+    return {
+      revele: false,
+      userCheck: false,
+    };
+  },
   props: {
     comment: {
       type: Object,
       required: true,
     },
   },
+  components: {
+    PopUp,
+  },
   methods: {
     dateTime(value) {
       return moment(value).locale("fr").calendar();
     },
+    checkUser() {
+      if (this.comment.userId == sessionStorage.getItem("userId")) {
+        return (this.userCheck = true);
+      }
+    },
+    togglePopUp() {
+      this.revele = !this.revele;
+    },
+    deleteComment(commentId) {
+      let result = confirm(
+        "Êtes-vous sûrs de vouloir supprimer ce commentaire ?"
+      );
+      if (result) {
+        this.$store
+          .dispatch("deleteComment", commentId)
+          .then((response) => {
+            console.log(response);
+            this.$emit("commentDeleted");
+            this.togglePopUp();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        this.togglePopUp();
+      }
+    },
+  },
+  created() {
+    this.checkUser();
   },
 };
 </script>
@@ -60,15 +106,18 @@ export default {
       &__username {
         font-weight: 700;
       }
-      &__datetime {
-        font-size: 12px;
-        color: $primary-color;
-        margin-right: 1em;
-      }
     }
     &__body {
       padding: 1em 0;
       font-size: 16px;
+      display: flex;
+      flex-direction: column;
+      &__datetime {
+        padding-top: 0.3em;
+        font-size: 12px;
+        color: $primary-color;
+        align-self: flex-end;
+      }
     }
   }
 }

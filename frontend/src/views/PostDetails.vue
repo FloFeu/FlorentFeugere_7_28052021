@@ -41,6 +41,7 @@
         v-for="comment in comments"
         :key="comment.commentId"
         :comment="comment"
+        @commentDeleted="commentDeleted"
       />
     </div>
   </div>
@@ -83,7 +84,6 @@ export default {
         .dispatch("getComments", this.post.postId)
         .then((response) => {
           this.comments = response;
-          console.log(this.comments);
         })
         .catch((error) => {
           console.log(error);
@@ -105,6 +105,9 @@ export default {
           console.log(error);
         });
     },
+    commentDeleted() {
+      this.fetchComments();
+    }
   },
   created() {
     console.log(this.$route.name);

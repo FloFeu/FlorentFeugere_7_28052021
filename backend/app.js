@@ -2,7 +2,6 @@
 require('dotenv').config()
 
 const express = require('express');
-const mysql = require('mysql2');
 const helmet = require('helmet');
 const path = require('path');
 const userRoutes = require('./routes/user');

@@ -2,7 +2,7 @@
 
 const Post = require('../models/Post');
 const fs = require('fs');
-const jwt = require('jsonwebtoken');
+
 
 exports.createPost = (req, res, next) => {
     if (!req.files[0] && req.body.msg == '') {
@@ -77,8 +77,16 @@ exports.deletePost = (req, res, next) => {
     const post = new Post({
         postId: req.params.id
     });
-
-    post.deleteOne()
-        .then(() => res.status(200).json({ message: 'Post correctement supprimé' }))
-        .catch(error => res.status(400).json({ error }));
+    post.getOne()
+        .then(([rows, fields]) => {
+            let image = rows[0].postAttachment
+            const filename = image.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => {
+                post.deleteOne()
+                    .then(() =>
+                        res.status(200).json({ message: 'Post correctement supprimé' }))
+            })
+        }).catch(error => {
+            res.status(400).json({ error })
+        });
 };

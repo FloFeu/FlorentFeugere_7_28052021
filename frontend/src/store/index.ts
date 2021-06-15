@@ -181,8 +181,8 @@ export default createStore({
           console.log(error);
         });
     },
-    deletePost({commit}, postId ){
-      
+    deletePost({ commit }, postId) {
+
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
           "BEARER " + this.state.user.token;
@@ -261,9 +261,8 @@ export default createStore({
           });
       });
     },
-    deleteProfile( {commit}, profileId) {
-      console.log(profileId);
-      
+    deleteProfile({ commit }, profileId) {
+
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
           "BEARER " + this.state.user.token;
@@ -284,6 +283,7 @@ export default createStore({
         instance
           .get("/posts/" + postId)
           .then((response) => {
+            commit('creatingPost', response.data);
             resolve(response.data);
           })
           .catch((error) => {
@@ -305,9 +305,7 @@ export default createStore({
           });
       });
     },
-    postComment({commit}, commentInfos) {
-      console.log(commentInfos);
-      
+    postComment({ commit }, commentInfos) {
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
           "BEARER " + this.state.user.token;
@@ -321,6 +319,20 @@ export default createStore({
             reject(error);
           });
       });
+    },
+    deleteComment({ commit }, commentId) {
+      return new Promise((resolve, reject) => {
+        instance.defaults.headers.common["Authorization"] =
+          "BEARER " + this.state.user.token;
+        instance
+          .delete("/comments/" + commentId)
+          .then((response) => {
+            resolve(response.data)
+          })
+          .catch((error) => {
+            reject(error)
+          });
+      })
     }
   },
   getters: {

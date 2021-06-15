@@ -7,7 +7,7 @@
       ><font-awesome-icon class="icon" :icon="['fas', 'arrow-left']" size="2x"
     /></router-link>
     <button
-      v-if="this.$route.path == '/settings/profile'"
+      v-if="this.$route.name == 'EditProfile'"
       @click.prevent="$emit('update')"
     >
       Enregistrer

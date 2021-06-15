@@ -5,7 +5,7 @@ const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const passwordValidator = require('password-validator');
 const User = require('../models/User');
-const conn = require('../config/db.config').promise();
+const fs = require('fs');
 
 
 
@@ -39,7 +39,7 @@ exports.signup = (req, res, next) => {
 
                 user.add()
                     .then(() => res.status(200).json({ message: 'Utilisateur créé !' }))
-                    .catch(error => res.status(400).json({ message: 'Cet email est déja utilisé !' }))
+                    .catch((error) => res.status(400).json({ error }))
             })
     } else {
         return res.status(401).json({ message: 'Mot de passe invalide' })
@@ -133,19 +133,19 @@ exports.modifyOne = (req, res, next) => {
         bio: req.body.bio,
         avatar: req.files[0] ? `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}` : req.body.currentAvatar
     });
-    console.log(user);
     user.findOneById()
         .then(([users, fields]) => {
-            console.log(users);
             if (users.length === 0) {
                 return res.status(401).json({ error: 'Aucune utilisateur n\'a été trouvé !' })
-            } else {
-                user.modifyOne()
-                    .then(() => res.status(200).json({ message: 'Les changements ont été appliqués.' }))
-                    .catch(err => res.status(400).json({ err }));
             }
-        })
-        .catch(error => res.status(400).json({ error }));
+            let image = users[0].avatar;
+            const filename = image.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => {
+                user.modifyOne()
+                    .then(() =>
+                        res.status(200).json({ message: 'Les changements ont été appliqués.' }))
+            })
+        }).catch(error => res.status(400).json({ error }));
 };
 
 exports.deleteOne = (req, res, next) => {
@@ -159,9 +159,23 @@ exports.deleteOne = (req, res, next) => {
             if (user.length === 0) {
                 return res.status(401).json({ error: 'Aucune utilisateur n\'a été trouvé !' })
             }
-            user.deleteOne()
-                .then(() => res.status(200).json({ message: 'Utilisateur correctement supprimé.' }))
-                .catch(error => res.status(400).json({ error }));
+            let image = users[0].avatar;
+            const filename = image.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => {
+                user.findFiles()
+                    .then(([files, fields]) => {
+                        files.forEach(file => {
+                            let image = file.PostAttachment;
+                            const filename = image.split('/images/')[1];
+                            fs.unlink(`images/${filename}`, () => {})
+                        });
+                        user.deleteOne()
+                            .then(() => {
+                                res.status(200).json({ message: 'Utilisateur correctement supprimé.' })
+                            })
+
+                    })
+            });
         })
         .catch(error => res.status(400).json({ error }));
 

@@ -46,12 +46,12 @@
     </div>
     <div class="editProfile__fields">
       <div>
-        <p>Prénom</p>
-        <input type="text" v-model="firstName" />
+        <label for="firstName">Prénom</label>
+        <input type="text" id="firstName" v-model="firstName" />
       </div>
       <div>
-        <p>Bio</p>
-        <input type="text" v-model="bio" />
+        <label for="bio">Prénom</label>
+        <input type="text" id="bio" v-model="bio" />
       </div>
       <span class="line-break"></span>
     </div>
@@ -174,7 +174,7 @@ export default {
       padding: 1em;
       margin: 1em 1em 2em 1em;
       background-color: $background;
-      p {
+      label {
         color: gray;
       }
       input {

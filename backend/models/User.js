@@ -60,6 +60,12 @@ module.exports = class User {
         return executeSql(sql);
     };
 
+    findFiles() {
+        const sql = `SELECT PostAttachment, users.userId FROM posts JOIN users ON posts.userId = users.userId WHERE users.userId="${this.userId}"`;
+        console.log(sql);
+        return executeSql(sql);
+    }
+
     deleteOne() {
         const sql = `DELETE FROM users WHERE userId="${this.userId}"`;
         console.log(sql);

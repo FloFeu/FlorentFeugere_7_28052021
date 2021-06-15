@@ -4,13 +4,9 @@
 
     <div class="bloc-modale__card">
       <div @click="togglePopUp" class="bloc-modale__card__btn">X</div>
-      <p>
-        <font-awesome-icon class="icon" :icon="['fas', 'edit']" />
-        Modifier le post
-      </p>
       <p @click="deletePost">
         <font-awesome-icon class="icon" :icon="['fas', 'trash']" />
-        Supprimer le post
+        Supprimer
       </p>
     </div>
   </div>
@@ -23,7 +19,7 @@ export default {
   methods: {
     deletePost() {
       this.$emit("deletePost");
-    },
+    }
   },
 };
 </script>
@@ -60,6 +56,7 @@ export default {
       position: absolute;
       top: 10px;
       right: 10px;
+      color: $error;  
     }
     p {
       padding: 1em 0;
