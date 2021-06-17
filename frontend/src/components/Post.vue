@@ -33,6 +33,9 @@
           :revele="revele"
           :togglePopUp="togglePopUp"
         />
+        <span v-if="admin" @click="deleteThisPost">
+          <font-awesome-icon class="icon" :icon="['fas', 'trash']" />
+        </span>
       </div>
       <router-link
         :to="{ name: 'PostDetails', params: { id: post.postId } }"
@@ -48,10 +51,15 @@
       </router-link>
       <div class="post__content__icon">
         {{ dateTime(post.postDate) }}
-        <font-awesome-icon class="icon" :icon="['fas', 'thumbs-up']" />
+
+        <p>
+          <font-awesome-icon @click="like(post.postId)" class="icon" :icon="['fas', 'thumbs-up']" />
+          <span> {{ post.postLikes }} </span>
+        </p>
+
         <router-link :to="{ name: 'PostDetails', params: { id: post.postId } }">
           <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
-          <span> {{ post.CommentsNumber }}</span>
+          <span> {{ post.postComments }}</span>
         </router-link>
       </div>
     </div>
@@ -61,29 +69,37 @@
 <script>
 import moment from "moment";
 import PopUp from "@/components/PopUp.vue";
+import { mapState } from "vuex";
+
 export default {
   components: {
     PopUp,
   },
+
   data() {
     return {
       revele: false,
       userCheck: false,
+      admin: false,
     };
   },
+
   props: {
     post: {
       type: Object,
       required: true,
     },
   },
+
   methods: {
     dateTime(value) {
       return moment(value).locale("fr").fromNow();
     },
+
     togglePopUp() {
       this.revele = !this.revele;
     },
+
     deletePost() {
       let result = confirm("Êtes-vous sûrs de vouloir supprimer ce post ?");
       if (result) {
@@ -92,7 +108,7 @@ export default {
             .dispatch("deletePost", this.post.postId)
             .then((response) => {
               console.log(response);
-              this.$emit("postDeleted");
+              this.$emit("refresh");
               this.togglePopUp();
             })
             .catch((error) => {
@@ -105,15 +121,57 @@ export default {
         this.togglePopUp();
       }
     },
+
     checkUser() {
       if (this.post.userId == sessionStorage.getItem("userId")) {
         return (this.userCheck = true);
       }
-    }
+    },
+
+    checkAdmin() {
+      if (this.user.isAdmin == 1) {
+        return (this.admin = true);
+      }
+    },
+
+    deleteThisPost() {
+      let result = confirm("Êtes-vous sûrs de vouloir supprimer ce post ?");
+      if (result) {
+        this.$store
+          .dispatch("deletePost", this.post.postId)
+          .then((response) => {
+            console.log(response);
+            this.$emit("refresh");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+
+    like(postId) {
+      this.$store
+        .dispatch("like", postId)
+        .then((response) => {
+          console.log(response);
+          this.$emit("refresh");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
+
   created() {
     this.checkUser();
-  }
+    this.checkAdmin();
+  },
+
+  computed: {
+    ...mapState({
+      user: "userInfos",
+    }),
+  },
 };
 </script>
 
@@ -143,6 +201,11 @@ export default {
     &__head {
       display: flex;
       justify-content: space-between;
+      .icon {
+        path {
+          fill: $error;
+        }
+      }
       &__info {
         text-decoration: none;
         b {
@@ -181,20 +244,22 @@ export default {
       color: $primary-color;
       display: flex;
       justify-content: space-between;
+
       a {
         text-decoration: none;
-        span {
-          color: $primary-color;
+      }
+      span {
+        color: $primary-color;
+      }
+      .icon {
+        margin-right: 5px;
+        path {
+          fill: lighten($surface, 25%);
         }
-        .icon {
+        &:hover {
+          cursor: pointer;
           path {
-            fill: lighten($surface, 25%);
-          }
-          &:hover {
-            cursor: pointer;
-            path {
-              fill: $primary-color;
-            }
+            fill: $primary-color;
           }
         }
       }

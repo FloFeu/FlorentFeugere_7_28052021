@@ -53,7 +53,7 @@
             v-for="post in posts"
             :key="post.postId"
             :post="post"
-            @postDeleted="postDeleted"
+            @refresh="refresh"
           />
         </div>
         <div v-else>
@@ -131,7 +131,7 @@ export default {
     deleteFile() {
       return (this.selectedFile = null), (this.previewImage = null);
     },
-    postDeleted() {
+    refresh() {
       this.getPosts();
     },
   },
@@ -140,7 +140,7 @@ export default {
       .dispatch("getUserInfos")
       .then(() => {
         (this.user.firstName = this.$store.state.userInfos.firstName),
-          (this.user.lastName = this.$store.state.userInfos.lastName);
+        (this.user.lastName = this.$store.state.userInfos.lastName);
       })
       .catch((error) => {
         console.log(error);

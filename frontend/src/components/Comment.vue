@@ -1,7 +1,8 @@
 <template>
   <div class="comment">
     <div class="comment__avatar">
-      <img :src="comment.avatar" alt="avatar" />
+      <img v-if="comment.avatar" :src="comment.avatar" alt="avatar" />
+      <img v-else src="@/assets/img/icon.png" alt="avatar">
     </div>
     <div class="comment__content">
       <div class="comment__content__header">
@@ -14,6 +15,9 @@
           :togglePopUp="togglePopUp"
           @deletePost="deleteComment(comment.commentId)"
         />
+        <span v-if="admin" @click="deleteThisComment(comment.commentId)">
+          <font-awesome-icon class="icon" :icon="['fas', 'trash']" />
+        </span>
       </div>
       <div class="comment__content__body">
         <p>{{ comment.comment }}</p>
@@ -28,6 +32,7 @@
 <script>
 import moment from "moment";
 import PopUp from "@/components/PopUp.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "Comment",
@@ -35,7 +40,8 @@ export default {
     return {
       revele: false,
       userCheck: false,
-    };
+      admin: false,
+    }
   },
   props: {
     comment: {
@@ -53,6 +59,11 @@ export default {
     checkUser() {
       if (this.comment.userId == sessionStorage.getItem("userId")) {
         return (this.userCheck = true);
+      }
+    },
+    checkAdmin() {
+      if (this.user.isAdmin == 1) {
+        return (this.admin = true);
       }
     },
     togglePopUp() {
@@ -77,10 +88,32 @@ export default {
         this.togglePopUp();
       }
     },
+    deleteThisComment(commentId) {
+      let result = confirm(
+        "Êtes-vous sûrs de vouloir supprimer ce commentaire ?"
+      );
+      if (result) {
+        this.$store
+          .dispatch("deleteComment", commentId)
+          .then((response) => {
+            console.log(response);
+            this.$emit("commentDeleted");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
   },
   created() {
     this.checkUser();
+    this.checkAdmin();
   },
+  computed: {
+    ...mapState({
+      user: "userInfos"
+    })
+  }
 };
 </script>
 
@@ -108,7 +141,7 @@ export default {
       }
     }
     &__body {
-      padding: 1em 0;
+      padding-top: 1em;
       font-size: 16px;
       display: flex;
       flex-direction: column;

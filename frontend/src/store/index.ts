@@ -17,7 +17,9 @@ if (!User) {
 export default createStore({
   state: {
     status: "",
+
     user: User,
+
     userInfos: {
       userId: "",
       firstName: "",
@@ -25,13 +27,17 @@ export default createStore({
       email: "",
       bio: "",
       avatar: "",
+      isAdmin: "",
     },
+
     postInfos: {
       selectedFile: "",
       msg: "",
       userId: "",
     },
+
     posts: [],
+
     profileInfos: {
       userId: "",
       firstName: "",
@@ -39,13 +45,17 @@ export default createStore({
       email: "",
       bio: "",
       avatar: "",
+      isAdmin: "",
     },
+
     profilePosts: [],
   },
+
   mutations: {
     setStatus(state, status) {
       state.status = status;
     },
+
     logUser(state, user) {
       state.user = user;
       instance.defaults.headers.common["Authorization"] = user.token;
@@ -54,9 +64,11 @@ export default createStore({
       sessionStorage.setItem("token", JSON.stringify(user.token));
       sessionStorage.setItem("firstName", JSON.stringify(user.firstName));
     },
+
     userInfos(state, userInfos) {
       state.userInfos = userInfos;
     },
+
     logOut(state) {
       state.user = {
         userId: -1,
@@ -67,9 +79,11 @@ export default createStore({
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("userId");
     },
+
     creatingPost(state, postInfos) {
       state.postInfos = postInfos;
     },
+
     postCreated(state) {
       state.postInfos = {
         selectedFile: "",
@@ -77,16 +91,20 @@ export default createStore({
         userId: "",
       };
     },
+
     postsFetched(state, posts) {
       state.posts = posts;
     },
+
     userFound(state, profileFound) {
       state.profileInfos = profileFound;
     },
+
     postsProfileFetched(state, posts) {
       state.profilePosts = posts;
     },
   },
+
   actions: {
     createAccount({ commit }, userInfos) {
       commit("setStatus", "loading");
@@ -98,12 +116,12 @@ export default createStore({
             resolve(response.data.message);
           })
           .catch((error) => {
-            console.log(error.response.status);
             commit("setStatus", "error_create");
             reject(error);
           });
       });
     },
+
     login({ commit }, userInfos) {
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
@@ -120,6 +138,7 @@ export default createStore({
           });
       });
     },
+
     getUserInfos({ commit }) {
       instance.defaults.headers.common["Authorization"] =
         "BEARER " + this.state.user.token;
@@ -132,10 +151,10 @@ export default createStore({
           console.log(error);
         });
     },
+
     createPost({ commit }, postInfos) {
       commit("setStatus", "loading");
       commit("creatingPost", postInfos);
-      console.log(postInfos);
       const formData = new FormData();
       if (this.state.postInfos.selectedFile !== "") {
         formData.append("image", this.state.postInfos.selectedFile);
@@ -145,7 +164,6 @@ export default createStore({
         formData.append("msg", this.state.postInfos.msg);
         formData.append("userId", this.state.postInfos.userId);
       }
-
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
           "BEARER " + this.state.user.token;
@@ -162,27 +180,26 @@ export default createStore({
             commit("setStatus", "");
           })
           .catch((error) => {
-            console.log(error.response.status);
             commit("setStatus", "error_create");
             reject(error);
           });
       });
     },
+
     getPosts({ commit }) {
       instance.defaults.headers.common["Authorization"] =
         "BEARER " + this.state.user.token;
       instance
         .get("/posts")
         .then((response) => {
-          console.log(response.data);
           commit("postsFetched", response.data);
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    deletePost({ commit }, postId) {
 
+    deletePost({ commit }, postId) {
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
           "BEARER " + this.state.user.token;
@@ -196,6 +213,7 @@ export default createStore({
           });
       })
     },
+
     getProfile({ commit }, profileId) {
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
@@ -204,7 +222,6 @@ export default createStore({
           .get("/auth/users/" + profileId)
           .then((response) => {
             commit("userFound", response.data);
-            console.log(response.data);
             resolve(response.data);
           })
           .catch((error) => {
@@ -212,12 +229,12 @@ export default createStore({
           });
       });
     },
+
     getProfilePosts({ commit }, profileId) {
       return new Promise((resolve, reject) => {
         instance
           .get("/posts/users/" + profileId)
           .then((response) => {
-            console.log(response);
             commit("postsProfileFetched", response.data);
             resolve(response.data);
           })
@@ -226,10 +243,9 @@ export default createStore({
           });
       });
     },
+
     modifyProfile({ commit }, newData) {
       commit("setStatus", "loading");
-      console.log(newData);
-
       const formData = new FormData();
       if (!newData.selectedAvatar) {
         formData.append("firstName", newData.firstName);
@@ -241,8 +257,6 @@ export default createStore({
         formData.append("avatar", newData.selectedAvatar);
         formData.append("currentAvatar", newData.currentAvatar);
       }
-      console.log(formData);
-
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
           "BEARER " + this.state.user.token;
@@ -252,17 +266,15 @@ export default createStore({
           .put("/auth/users/" + this.state.userInfos.userId, formData)
           .then((response) => {
             commit("setStatus", "created");
-            console.log(response);
             resolve(response.data.message);
           })
           .catch((error) => {
-            console.log(error.response.status);
             reject(error);
           });
       });
     },
-    deleteProfile({ commit }, profileId) {
 
+    deleteProfile({ commit }, profileId) {
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
           "BEARER " + this.state.user.token;
@@ -276,6 +288,7 @@ export default createStore({
           });
       })
     },
+
     getOnePost({ commit }, postId) {
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
@@ -305,6 +318,7 @@ export default createStore({
           });
       });
     },
+
     postComment({ commit }, commentInfos) {
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
@@ -320,6 +334,7 @@ export default createStore({
           });
       });
     },
+
     deleteComment({ commit }, commentId) {
       return new Promise((resolve, reject) => {
         instance.defaults.headers.common["Authorization"] =
@@ -333,8 +348,25 @@ export default createStore({
             reject(error)
           });
       })
+    },
+
+    like({ commit }, postId) {
+      console.log(this.state.user.userId);
+      return new Promise((resolve, reject) => {
+        instance.defaults.headers.common["Authorization"] =
+          "BEARER " + this.state.user.token;
+        instance
+          .post("/posts/like/" + postId, { userId: this.state.user.userId })
+          .then((response) => {
+            resolve(response.data)
+          })
+          .catch((error) => {
+            reject(error)
+          });
+      })
     }
   },
+
   getters: {
     isAuthenticated() {
       if (sessionStorage.getItem("token")) {

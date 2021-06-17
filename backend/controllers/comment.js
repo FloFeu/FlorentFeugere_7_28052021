@@ -23,9 +23,9 @@ exports.createComment = (req, res, next) => {
 
                 comment.add()
                     .then(() => {
-                        comment.incrPost()
-                            .then(res.status(200).json({ message: 'Commentaire ajouté :' }))
-                    }).catch((error) => res.status(401).json({ error }))
+                        res.status(200).json({ message: 'Commentaire ajouté :' })
+                    })
+                    .catch((error) => res.status(401).json({ error }))
             }
         }
         catch (error) {
@@ -75,16 +75,8 @@ exports.deleteComment = (req, res, next) => {
             if (rows.length === 0) {
                 return res.status(401).json({ error: 'Commentaire introuvable !' })
             }
-            console.log(rows);
-            const idPost = rows[0].postId;
-            let postDecr = new Comment({
-                postId: idPost
-            });
-            postDecr.decrPost()
-                .then(() => {
-                    comment.deleteOne()
-                        .then(() => res.status(200).json({ message: 'Commentaire correctement supprimé.' }))
-                        .catch(err => res.status(400).json({ error }));
-                })
+            comment.deleteOne()
+                .then(() => res.status(200).json({ message: 'Commentaire correctement supprimé.' }))
+                .catch(err => res.status(400).json({ error }));
         })
 }

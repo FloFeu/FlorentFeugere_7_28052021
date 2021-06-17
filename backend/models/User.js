@@ -43,7 +43,7 @@ module.exports = class User {
     };
 
     findOneById() {
-        const sql = `SELECT users.userId, firstName, lastName, email, bio, avatar FROM users WHERE users.userId="${this.userId}"`;
+        const sql = `SELECT users.userId, firstName, lastName, email, bio, avatar, isAdmin FROM users WHERE users.userId="${this.userId}"`;
         console.log(sql);
         return executeSql(sql);
     }

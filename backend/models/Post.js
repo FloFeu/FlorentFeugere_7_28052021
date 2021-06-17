@@ -24,20 +24,20 @@ module.exports = class Post {
         return executeSql(sql);
     };
 
-    getAll() {  
-        const sql = `SELECT postId, msg, postDate, PostAttachment, posts.userId, CommentsNumber, users.userId, firstName, lastName, avatar FROM posts JOIN users ON posts.userId = users.userId ORDER BY postDate DESC`;
+    getAll() {
+        const sql = `SELECT postId, msg, postDate, PostAttachment, posts.userId, users.userId, firstName, lastName, avatar, (SELECT COUNT(*) FROM comments WHERE comments.postId = posts.postId) as postComments, (SELECT COUNT(*) FROM likes WHERE likes.postId = posts.postId) as postLikes FROM posts JOIN users ON posts.userId = users.userId ORDER BY postDate DESC`;
         console.log(sql);
         return executeSql(sql);
     };
 
     getOne() {
-        const sql = `SELECT postId, msg, postDate, postAttachment, posts.userId, users.userId, firstName, lastName, avatar FROM posts JOIN users ON posts.userId = users.userId WHERE postId=${this.postId}`;
+        const sql = `SELECT postId, msg, postDate, postAttachment, posts.userId, users.userId, firstName, lastName, avatar, (SELECT COUNT(*) FROM comments WHERE comments.postId = posts.postId) as postComments, (SELECT COUNT(*) FROM likes WHERE likes.postId = posts.postId) as postLikes FROM posts JOIN users ON posts.userId = users.userId WHERE postId=${this.postId}`;
         console.log(sql);
         return executeSql(sql);
     };
 
     getAllPostsFromUserId() {
-        const sql = `SELECT postId, msg, postDate, PostAttachment, posts.userId, CommentsNumber, users.userId, firstName, lastName, avatar FROM posts JOIN users ON posts.userId = users.userId WHERE posts.userId=${this.userId} ORDER BY postDate DESC`;
+        const sql = `SELECT postId, msg, postDate, PostAttachment, posts.userId, users.userId, firstName, lastName, avatar, (SELECT COUNT(*) FROM comments WHERE comments.postId = posts.postId) as postComments, (SELECT COUNT(*) FROM likes WHERE likes.postId = posts.postId) as postLikes FROM posts JOIN users ON posts.userId = users.userId WHERE posts.userId=${this.userId} ORDER BY postDate DESC`;
         console.log(sql);
         return executeSql(sql);
     };
@@ -45,18 +45,30 @@ module.exports = class Post {
     modifyOne() {
         const sql = `UPDATE posts SET msg="${this.msg}", postAttachment="${this.postAttachment}" WHERE postId=${this.postId}`;
         console.log(sql);
-        return executeSql(sql); 
+        return executeSql(sql);
     };
 
     deleteOne() {
-        const sql = `DELETE FROM posts WHERE postId=${this.postId}`;
+        const sql = `DELETE FROM posts WHERE postId="${this.postId}"`;
         console.log(sql);
         return executeSql(sql);
     };
 
-    nbComments() {
-        const sql =`Select posts.postId, COUNT(comments.postId) AS nbComments FROM posts LEFT JOIN comments ON posts.postId = comments.postId GROUP BY posts.postId;`
+    checkLike() {
+        const sql = `SELECT likes.like, likes.userId FROM likes WHERE userId = "${this.userId}" AND postId = "${this.postId}"`;
+        console.log(sql);
+        return executeSql(sql);
+    };
+
+    like() {
+        const sql = `INSERT INTO likes (userId, postId) VALUES ("${this.userId}", "${this.postId}")`;
+        console.log(sql);
+        return executeSql(sql);
+    };
+
+    dislike(likeId) {
+        const sql = `DELETE FROM likes WHERE likes.like = ${likeId}`;
+        console.log(sql);
         return executeSql(sql);
     }
-
 }

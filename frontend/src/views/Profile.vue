@@ -16,20 +16,41 @@
           class="profile__top__img"
         />
       </div>
+
       <div class="profile__top__edit">
         <router-link v-if="checkedUser" :to="{ name: 'EditProfile' }">
           Editer le profil
         </router-link>
+        <button
+          v-if="admin"
+          class="editProfile__delete__btn"
+          @click="deleteValidation"
+        >
+          Supprimer le compte
+        </button>
       </div>
     </div>
+
     <div class="profile__infos">
-      <p class="profile__infos__name">
-        {{ profile.firstName }} {{ profile.lastName }}
-      </p>
+      <div>
+        <p class="profile__infos__name">
+          {{ profile.firstName }} {{ profile.lastName }}
+        </p>
+        <p class="profile__infos__role">
+          <span v-if="profile.isAdmin == 1">Admin</span>
+          <span v-else> Membre</span>
+        </p>
+      </div>
       <p class="profile__infos__bio">{{ profile.bio }}</p>
     </div>
+
     <div v-if="posts.length">
-      <Post v-for="post in posts" :key="post.id" :post="post" />
+      <Post
+        v-for="post in posts"
+        :key="post.id"
+        :post="post"
+        @refresh="refresh"
+      />
     </div>
     <p class="noPub" v-else>Aucune publication pour le moment.</p>
   </div>
@@ -45,6 +66,7 @@ export default {
   data() {
     return {
       checkedUser: false,
+      admin: false,
     };
   },
   props: {
@@ -72,32 +94,55 @@ export default {
   methods: {
     userCheck() {
       if (this.user.userId === this.profile.userId) {
-        console.log("oui");
         return (this.checkedUser = true);
+      } else if (this.user.isAdmin == 1) {
+        return (this.admin = true);
       } else {
-        console.log("non");
         return !this.checkedUser;
       }
     },
+
+    deleteValidation() {
+      let result = confirm("Êtes-vous sûrs de vouloir supprimer ce compte ?");
+      if (result) {
+        this.$store
+          .dispatch("deleteProfile", this.profile.userId)
+          .then(() => {
+            this.$router.push({ name: "Home" });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    getProfile() {
+      console.log(this.id);
+      this.$store
+        .dispatch("getProfile", this.id)
+        .then(() => {
+          this.getProfilePosts();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getProfilePosts() {
+      this.$store
+        .dispatch("getProfilePosts", this.profile.userId)
+        .then(() => {
+          this.userCheck();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    
+    refresh() {
+      this.getProfilePosts();
+    },
   },
   created() {
-    console.log(this.id);
-    this.$store
-      .dispatch("getProfile", this.id)
-      .then((response) => {
-        console.log(response);
-        this.$store
-          .dispatch("getProfilePosts", this.profile.userId)
-          .then((response) => {
-            console.log(response);
-            this.userCheck();
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    console.log(this.user.userId);
-    console.log(this.profile.userId);
+    this.getProfile();
   },
 };
 </script>
@@ -139,10 +184,19 @@ export default {
   }
   &__infos {
     padding: 1em;
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
     &__name {
       font-size: 20px;
       font-weight: 700;
       margin-bottom: 1em;
+    }
+    &__role {
+      span {
+        color: $primary-color;
+      }
     }
   }
   .noPub {

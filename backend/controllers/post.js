@@ -90,3 +90,30 @@ exports.deletePost = (req, res, next) => {
             res.status(400).json({ error })
         });
 };
+
+exports.likePost = (req, res, next) => {
+
+    const post = new Post({
+        postId: req.params.id,
+        userId: req.body.userId
+    });
+
+    post.checkLike()
+        .then(([row, fields]) => {
+            console.log(row);
+            if (row.length) {
+                post.dislike(row[0].like)
+                    .then(() => {
+                        res.status(200).json({ message: "Post unliké !" })
+                    })
+            } else {
+                post.like()
+                    .then(() => {
+                        res.status(200).json({ message: "Post liké !" })
+                    })
+            }
+        })
+        .catch((error) => {
+            res.status(400).json({ error : 'error' })
+        })
+}

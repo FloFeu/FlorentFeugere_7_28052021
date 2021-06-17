@@ -18,9 +18,17 @@
       <div class="line-break"></div>
       <div class="postDetails__postInfos">
         <span> {{ dateTime(post.postDate) }} </span>
-        <font-awesome-icon class="icon" :icon="['fas', 'thumbs-up']" />
+        <p>
+          <font-awesome-icon
+            @click="like(post.postId)"
+            class="icon"
+            :icon="['fas', 'thumbs-up']"
+          />
+          <span> {{ post.postLikes }} </span>
+        </p>
         <label for="commentArea">
           <font-awesome-icon class="icon" :icon="['fas', 'comment']" />
+          <span> {{ post.postComments }} </span>
         </label>
       </div>
     </div>
@@ -79,6 +87,18 @@ export default {
     dateTime(value) {
       return moment(value).locale("fr").calendar();
     },
+    fetchPost() {
+      this.$store
+        .dispatch("getOnePost", this.id)
+        .then((response) => {
+          this.post = response;
+          this.fetchComments();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     fetchComments() {
       this.$store
         .dispatch("getComments", this.post.postId)
@@ -89,6 +109,7 @@ export default {
           console.log(error);
         });
     },
+
     postComment() {
       this.$store
         .dispatch("postComment", {
@@ -96,8 +117,7 @@ export default {
           userId: this.user.userId,
           postId: this.post.postId,
         })
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           this.newComment = "";
           this.fetchComments();
         })
@@ -105,22 +125,25 @@ export default {
           console.log(error);
         });
     },
+
     commentDeleted() {
       this.fetchComments();
-    }
+    },
+
+    like(postId) {
+      this.$store
+        .dispatch("like", postId)
+        .then(() => {
+          this.fetchPost();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   created() {
     console.log(this.$route.name);
-    this.$store
-      .dispatch("getOnePost", this.id)
-      .then((response) => {
-        this.post = response;
-        console.log(this.post);
-        this.fetchComments();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.fetchPost();
   },
 };
 </script>
@@ -183,6 +206,7 @@ export default {
       color: $primary-color;
     }
     .icon {
+      margin-right: 5px;
       path {
         fill: $primary-color;
       }
