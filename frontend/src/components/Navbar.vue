@@ -5,10 +5,16 @@
     </router-link>
     <ul class="menu__nav">
       <li>
-        <router-link :to="'/profile/' + user.userId"> Profil </router-link>
+        <router-link :to="'/profile/' + user.userId">
+          <span>Profil</span>
+          <font-awesome-icon class="icon" :icon="['fas', 'user']" />
+        </router-link>
       </li>
       <li>
-        <p class="logOut" @click="logOut">Déconnexion</p>
+        <p class="logOut" @click="logOut">
+          <span>Déconnexion</span>
+          <font-awesome-icon class="icon" :icon="['fas', 'power-off']" />
+        </p>
       </li>
     </ul>
   </nav>
@@ -55,11 +61,11 @@ nav {
   flex-wrap: wrap;
   position: sticky;
   top: 0;
-  background-color: $surface;
-  border-radius: 0 0 10px 10px;
+  background-color: darken($surface, 5%);
+
   .logo {
     width: 200px;
-    border: 1px solid $surface;
+    border: 1px solid darken($surface, 5%);
     border-radius: 50px;
     padding: 7px 8px;
     transition: 150ms background;
@@ -71,15 +77,26 @@ nav {
   }
   .menu__nav {
     list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     li {
-      text-align: right;
       padding-bottom: 0.3em;
       a,
       p {
         font-size: 16px;
         text-decoration: none;
+        span{
+          padding-right: 1em;
+          display: none;
+          @include tablet{
+            display: inline-block;
+          }
+        }
         &:hover {
-          color: $primary-color;
+          span {
+            color: $primary-color;
+          }
           border-bottom: 1px solid $primary-color;
           cursor: pointer;
         }

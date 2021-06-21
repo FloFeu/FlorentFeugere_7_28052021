@@ -1,21 +1,29 @@
 <template>
   <div class="comment">
     <div class="comment__avatar">
-      <img v-if="comment.avatar" :src="comment.avatar" alt="avatar" />
-      <img v-else src="@/assets/img/icon.png" alt="avatar">
+      <router-link :to="{ name: 'Profile', params: { id: comment.userId } }">
+        <img v-if="comment.avatar" :src="comment.avatar" alt="avatar" />
+        <img v-else src="@/assets/img/icon.png" alt="avatar" />
+      </router-link>
     </div>
     <div class="comment__content">
       <div class="comment__content__header">
-        <p class="comment__content__header__username">
-          {{ comment.firstName + " " + comment.lastName }}
-        </p>
-        <span v-if="userCheck" @click="togglePopUp">...</span>
+        <router-link class="comment__content__header__username" :to="{ name: 'Profile', params: { id: comment.userId } }">
+            {{ comment.firstName + " " + comment.lastName }}
+        </router-link>
+        <span v-if="userCheck & !admin" @click="togglePopUp" class="popUp"
+          >...</span
+        >
         <PopUp
           :revele="revele"
           :togglePopUp="togglePopUp"
           @deletePost="deleteComment(comment.commentId)"
         />
-        <span v-if="admin" @click="deleteThisComment(comment.commentId)">
+        <span
+          v-if="admin"
+          @click="deleteThisComment(comment.commentId)"
+          class="admin__button"
+        >
           <font-awesome-icon class="icon" :icon="['fas', 'trash']" />
         </span>
       </div>
@@ -41,7 +49,7 @@ export default {
       revele: false,
       userCheck: false,
       admin: false,
-    }
+    };
   },
   props: {
     comment: {
@@ -103,7 +111,7 @@ export default {
             console.log(error);
           });
       }
-    }
+    },
   },
   created() {
     this.checkUser();
@@ -111,15 +119,21 @@ export default {
   },
   computed: {
     ...mapState({
-      user: "userInfos"
-    })
-  }
+      user: "userInfos",
+    }),
+  },
 };
 </script>
 
 <style lang="scss">
 @import "@/assets/sass/main";
 .comment {
+  @include desktop {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 1em;
+  }
   background-color: $surface;
   border-top: 1px solid $background;
   padding: 1em;
@@ -136,8 +150,17 @@ export default {
       display: flex;
       width: 100%;
       justify-content: space-between;
+      .admin__button {
+        cursor: pointer;
+        .icon {
+          path {
+            fill: $error;
+          }
+        }
+      }
       &__username {
         font-weight: 700;
+        text-decoration: none;
       }
     }
     &__body {

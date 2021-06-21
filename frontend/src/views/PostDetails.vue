@@ -1,18 +1,33 @@
 <template>
   <div>
     <Nav_second />
+
     <div class="postDetails">
-      <div class="postDetails__userInfos">
-        <img v-if="post.avatar" :src="post.avatar" alt="avatar" />
-        <img v-else src="@/assets/img/icon.png" alt="avatar" />
-        <div>
-          <p>{{ post.firstName + " " + post.lastName }}</p>
-        </div>
+      <div>
+        <router-link
+          class="postDetails__userInfos"
+          :to="{ name: 'Profile', params: { id: post.userId } }"
+        >
+          <img v-if="post.avatar" :src="post.avatar" alt="avatar" />
+          <img v-else src="@/assets/img/icon.png" alt="avatar" />
+          <div>
+            <p>{{ post.firstName + " " + post.lastName }}</p>
+          </div>
+        </router-link>
       </div>
       <div class="postDetails__postContent">
         <p>{{ post.msg }}</p>
         <div v-if="post.postAttachment" class="postDetails__postContent__img">
-          <img :src="post.postAttachment" alt="post attachment" />
+          <img
+            :src="post.postAttachment"
+            alt="post attachment"
+            @click="togglePopUp"
+          />
+          <Photo
+            :revele="revele"
+            :togglePopUp="togglePopUp"
+            :photo="post.postAttachment"
+          />
         </div>
       </div>
       <div class="line-break"></div>
@@ -32,7 +47,7 @@
         </label>
       </div>
     </div>
-    <div>
+    <div class="comments__wrapper">
       <div class="newcomment">
         <input
           name="commentArea"
@@ -59,6 +74,7 @@
 import moment from "moment";
 import Nav_second from "@/components/Nav_second.vue";
 import Comment from "@/components/Comment.vue";
+import Photo from "@/components/Photo.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -68,6 +84,7 @@ export default {
       post: {},
       comments: [],
       newComment: "",
+      revele: false,
     };
   },
   props: {
@@ -76,6 +93,7 @@ export default {
   components: {
     Nav_second,
     Comment,
+    Photo,
   },
   computed: {
     ...mapState({
@@ -140,6 +158,10 @@ export default {
           console.log(error);
         });
     },
+
+    togglePopUp() {
+      this.revele = !this.revele;
+    },
   },
   created() {
     console.log(this.$route.name);
@@ -152,6 +174,11 @@ export default {
 @import "@/assets/sass/main";
 
 .postDetails {
+  @include desktop {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
   border-top: 1px solid $background;
   background-color: $surface;
   display: flex;
@@ -161,6 +188,7 @@ export default {
     display: flex;
     align-items: center;
     width: 100%;
+    text-decoration: none;
     img {
       @include profile-img;
     }
@@ -187,6 +215,8 @@ export default {
     }
     &__img {
       margin: 1em 0;
+      display: flex;
+      justify-content: center;
       img {
         border-radius: 20px;
       }
@@ -213,33 +243,49 @@ export default {
     }
   }
 }
-.newcomment {
-  display: flex;
-  flex-direction: column;
-
-  border-top: 1px solid $background;
-  background-color: $surface;
-  padding: 1em;
-  #commentArea {
-    width: 100%;
-    color: $white;
+.comments__wrapper {
+  @include desktop {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
     background-color: $surface;
-    border: none;
-    border-radius: 15px;
-    padding: 1em;
-    font-size: 16px;
-    word-break: break-word;
-    &::placeholder {
-      color: $primary-color;
-      font-size: 16px;
-    }
+    padding-bottom: 1em;
+    border-radius: 0 0 15px 15px;
   }
-  button {
-    margin-top: 1em;
-    background-color: $background;
-    padding: 0.4em;
-    border-radius: 15px;
-    border: none;
+  .newcomment {
+    @include desktop {
+      width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-bottom: 1em;
+    }
+    display: flex;
+    flex-direction: column;
+
+    border-top: 1px solid $background;
+    background-color: $surface;
+    padding: 1em;
+    #commentArea {
+      width: 100%;
+      color: $white;
+      background-color: $surface;
+      border: none;
+      border-radius: 15px;
+      padding: 1em;
+      font-size: 16px;
+      word-break: break-word;
+      &::placeholder {
+        color: $primary-color;
+        font-size: 16px;
+      }
+    }
+    button {
+      margin-top: 1em;
+      background-color: $background;
+      padding: 0.4em;
+      border-radius: 15px;
+      border: none;
+    }
   }
 }
 </style>

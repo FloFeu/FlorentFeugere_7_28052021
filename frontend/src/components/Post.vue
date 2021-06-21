@@ -27,7 +27,7 @@
         >
           <b>{{ post.firstName + " " + post.lastName }} </b>
         </router-link>
-        <span v-if="userCheck" @click="togglePopUp">...</span>
+        <span v-if="userCheck & !admin" @click="togglePopUp" class="popUp">...</span>
         <PopUp
           @deletePost="deletePost"
           :revele="revele"
@@ -53,7 +53,11 @@
         {{ dateTime(post.postDate) }}
 
         <p>
-          <font-awesome-icon @click="like(post.postId)" class="icon" :icon="['fas', 'thumbs-up']" />
+          <font-awesome-icon
+            @click="like(post.postId)"
+            class="icon"
+            :icon="['fas', 'thumbs-up']"
+          />
           <span> {{ post.postLikes }} </span>
         </p>
 
@@ -178,6 +182,7 @@ export default {
 <style lang="scss">
 @import "@/assets/sass/main";
 .post {
+  margin: 0 1em 0 1em;
   background-color: $surface;
   border-bottom: 1px solid $background;
   padding: 15px 0;
@@ -185,7 +190,13 @@ export default {
   padding-left: 10px;
   &__img {
     width: 20%;
+    @include tablet {
+      width: 15%;
+    }
     &--img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
       border-radius: 50%;
       width: 70px;
       height: 70px;
@@ -198,10 +209,17 @@ export default {
     width: 80%;
     display: flex;
     flex-direction: column;
+    @include tablet {
+      width: 85%;
+    }
     &__head {
       display: flex;
       justify-content: space-between;
+      .popUp{
+        cursor: pointer;
+      }
       .icon {
+        cursor: pointer;
         path {
           fill: $error;
         }
@@ -217,7 +235,7 @@ export default {
     }
     &__msg {
       margin: 1em 0;
-      font-size: 1.1em;
+      font-size: 1.2em;
       text-decoration: none;
       display: flex;
       flex-direction: column;
@@ -228,15 +246,19 @@ export default {
         -webkit-line-clamp: 5;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        padding-left: 1em;
       }
       &--attachment {
         width: 100%;
         margin-top: 1em;
-        align-self: center;
         img {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
           border-radius: 15px;
           border: 1px solid lighten($surface, 25%);
           width: 100%;
+          max-width: 350px;
         }
       }
     }
@@ -244,6 +266,7 @@ export default {
       color: $primary-color;
       display: flex;
       justify-content: space-between;
+      font-size: 0.9em;
 
       a {
         text-decoration: none;

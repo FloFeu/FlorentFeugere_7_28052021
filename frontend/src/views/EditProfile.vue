@@ -3,62 +3,64 @@
     <div class="editProfile">
       <Nav_second @update="modifyProfile" />
     </div>
-    <div class="profile__top editProfile__top">
-      <div>
-        <label for="edit__file" class="editProfile__top__file">
-          <div v-if="!previewImage">
-            <img
-              v-if="user.avatar"
-              :src="user.avatar"
-              alt="avatar"
-              class="profile__top__img editProfile__top__file__img"
-            />
+    <div class="wrapper">
+      <div class="profile__top editProfile__top">
+        <div>
+          <label for="edit__file" class="editProfile__top__file">
+            <div v-if="!previewImage">
+              <img
+                v-if="user.avatar"
+                :src="user.avatar"
+                alt="avatar"
+                class="profile__top__img editProfile__top__file__img"
+              />
 
-            <img
+              <img
+                v-else
+                src="@/assets/img/icon.png"
+                alt="avatar"
+                class="profile__top__img editProfile__top__file__img"
+              />
+              <span>
+                <font-awesome-icon
+                  class="icon editProfile__top__file__labelImg"
+                  size="2x"
+                  :icon="['fas', 'plus']"
+              /></span>
+            </div>
+            <div
               v-else
-              src="@/assets/img/icon.png"
-              alt="avatar"
+              :style="{
+                'background-image': `url(${previewImage})`,
+                'background-size': '100px',
+              }"
               class="profile__top__img editProfile__top__file__img"
-            />
-            <span>
-              <font-awesome-icon
-                class="icon editProfile__top__file__labelImg"
-                size="2x"
-                :icon="['fas', 'plus']"
-            /></span>
-          </div>
-          <div
-            v-else
-            :style="{
-              'background-image': `url(${previewImage})`,
-              'background-size': '100px',
-            }"
-            class="profile__top__img editProfile__top__file__img"
-          ></div>
-        </label>
-        <input
-          type="file"
-          name="edit__file"
-          id="edit__file"
-          @change="onFileSelected"
-        />
+            ></div>
+          </label>
+          <input
+            type="file"
+            name="edit__file"
+            id="edit__file"
+            @change="onFileSelected"
+          />
+        </div>
       </div>
-    </div>
-    <div class="editProfile__fields">
-      <div>
-        <label for="firstName">Prénom</label>
-        <input type="text" id="firstName" v-model="firstName" />
+      <div class="editProfile__fields">
+        <div>
+          <label for="firstName">Prénom</label>
+          <input type="text" id="firstName" v-model="firstName" />
+        </div>
+        <div>
+          <label for="bio">Bio</label>
+          <input type="text" id="bio" v-model="bio" />
+        </div>
+        <span class="line-break"></span>
       </div>
-      <div>
-        <label for="bio">Prénom</label>
-        <input type="text" id="bio" v-model="bio" />
+      <div class="editProfile__delete">
+        <button class="editProfile__delete__btn" @click="deleteValidation">
+          Suppression du compte
+        </button>
       </div>
-      <span class="line-break"></span>
-    </div>
-    <div class="editProfile__delete">
-      <button class="editProfile__delete__btn" @click="deleteValidation">
-        Suppression du compte
-      </button>
     </div>
   </div>
 </template>
@@ -148,6 +150,16 @@ export default {
 
 <style lang="scss">
 @import "@/assets/sass/main";
+.wrapper {
+  @include desktop {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: $black;
+    padding-bottom: 1em;
+    border-radius: 0 0 15px 15px;
+  }
+}
 .editProfile {
   &__top {
     &__file {

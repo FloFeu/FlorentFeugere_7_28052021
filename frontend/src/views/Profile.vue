@@ -1,58 +1,60 @@
 <template>
   <div class="profile">
     <Nav_second />
-    <div class="profile__top">
-      <div>
-        <img
-          v-if="profile.avatar"
-          :src="profile.avatar"
-          alt="avatar"
-          class="profile__top__img"
+    <div class="wrapper">
+      <div class="profile__top">
+        <div>
+          <img
+            v-if="profile.avatar"
+            :src="profile.avatar"
+            alt="avatar"
+            class="profile__top__img"
+          />
+          <img
+            v-else
+            src="@/assets/img/icon.png"
+            alt="avatar"
+            class="profile__top__img"
+          />
+        </div>
+
+        <div class="profile__top__edit">
+          <router-link v-if="checkedUser" :to="{ name: 'EditProfile' }">
+            Editer le profil
+          </router-link>
+          <button
+            v-if="admin"
+            class="editProfile__delete__btn"
+            @click="deleteValidation"
+          >
+            Supprimer le compte
+          </button>
+        </div>
+      </div>
+
+      <div class="profile__infos">
+        <div>
+          <p class="profile__infos__name">
+            {{ profile.firstName }} {{ profile.lastName }}
+          </p>
+          <p class="profile__infos__role">
+            <span v-if="profile.isAdmin == 1">Admin</span>
+            <span v-else> Membre</span>
+          </p>
+        </div>
+        <p class="profile__infos__bio">{{ profile.bio }}</p>
+      </div>
+
+      <div v-if="posts.length">
+        <Post
+          v-for="post in posts"
+          :key="post.id"
+          :post="post"
+          @refresh="refresh"
         />
-        <img
-          v-else
-          src="@/assets/img/icon.png"
-          alt="avatar"
-          class="profile__top__img"
-        />
       </div>
-
-      <div class="profile__top__edit">
-        <router-link v-if="checkedUser" :to="{ name: 'EditProfile' }">
-          Editer le profil
-        </router-link>
-        <button
-          v-if="admin"
-          class="editProfile__delete__btn"
-          @click="deleteValidation"
-        >
-          Supprimer le compte
-        </button>
-      </div>
+      <p class="noPub" v-else>Aucune publication pour le moment.</p>
     </div>
-
-    <div class="profile__infos">
-      <div>
-        <p class="profile__infos__name">
-          {{ profile.firstName }} {{ profile.lastName }}
-        </p>
-        <p class="profile__infos__role">
-          <span v-if="profile.isAdmin == 1">Admin</span>
-          <span v-else> Membre</span>
-        </p>
-      </div>
-      <p class="profile__infos__bio">{{ profile.bio }}</p>
-    </div>
-
-    <div v-if="posts.length">
-      <Post
-        v-for="post in posts"
-        :key="post.id"
-        :post="post"
-        @refresh="refresh"
-      />
-    </div>
-    <p class="noPub" v-else>Aucune publication pour le moment.</p>
   </div>
 </template>
 
@@ -136,7 +138,7 @@ export default {
           console.log(error);
         });
     },
-    
+
     refresh() {
       this.getProfilePosts();
     },
@@ -151,6 +153,17 @@ export default {
 @import "@/assets/sass/main";
 
 .profile {
+  
+  .wrapper{
+    @include desktop{
+      width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: $black;
+      padding-bottom: 1em;
+      border-radius: 0 0 15px 15px;
+    }
+  }
   &__top {
     display: flex;
     justify-content: space-between;

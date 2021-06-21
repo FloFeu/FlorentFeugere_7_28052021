@@ -26,11 +26,19 @@ body {
 
 // Style cartes Login
 .card {
-  margin: 10em 1em;
-  max-width: 100%;
+  margin: 2em auto;
+  width: 95%;
+  max-width: 500px;
   background: $surface;
   border-radius: 16px;
   padding: 32px;
+  @include tablet {
+    margin-top: 4em;
+  }
+  @include desktop{
+    margin-top: 10em;
+  }
+
   &__title {
     text-align: center;
     font-weight: 800;

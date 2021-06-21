@@ -140,7 +140,7 @@ export default {
       .dispatch("getUserInfos")
       .then(() => {
         (this.user.firstName = this.$store.state.userInfos.firstName),
-        (this.user.lastName = this.$store.state.userInfos.lastName);
+          (this.user.lastName = this.$store.state.userInfos.lastName);
       })
       .catch((error) => {
         console.log(error);
@@ -161,6 +161,10 @@ export default {
 <style lang="scss">
 @import "@/assets/sass/main";
 .home {
+  @include desktop {
+    width: 600px;
+    margin: auto;
+  }
   margin: 1em;
   display: grid;
   grid-template:
@@ -170,6 +174,7 @@ export default {
   grid-template-columns: 4fr;
   grid-column-gap: 1em;
   &__infos {
+    margin-top: 1em;
     grid-area: nav;
     background-color: $background;
 
@@ -240,6 +245,7 @@ export default {
     background-color: $black;
     border-radius: 16px;
     color: $white;
+    padding-bottom: 1em;
     .line-break {
       @include line-break;
     }

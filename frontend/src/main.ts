@@ -10,7 +10,9 @@ import {
   faArrowLeft,
   faPlus,
   faThumbsUp,
-  faEdit
+  faEdit,
+  faUser,
+  faPowerOff
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -24,7 +26,9 @@ library.add(
   faTrash,
   faArrowLeft,
   faPlus,
-  faEdit
+  faEdit,
+  faUser,
+  faPowerOff
 );
 
 createApp(App)
