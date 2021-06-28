@@ -38,9 +38,6 @@
             v-if="msg.length | (selectedFile !== null)"
           >
             <span v-if="status == 'loading'"> Envoi du post...</span>
-            <span v-else-if="status == 'created'">
-              Post créé avec succès !</span
-            >
             <span v-else> Créer un post.</span>
           </button>
         </div>
@@ -141,11 +138,11 @@ export default {
       .then(() => {
         (this.user.firstName = this.$store.state.userInfos.firstName),
           (this.user.lastName = this.$store.state.userInfos.lastName);
+
       })
       .catch((error) => {
         console.log(error);
       });
-    console.log(this.$store.state.userInfos);
     this.getPosts();
   },
   computed: {

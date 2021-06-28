@@ -58,7 +58,6 @@ export default createStore({
 
     logUser(state, user) {
       state.user = user;
-      instance.defaults.headers.common["Authorization"] = user.token;
       sessionStorage.setItem("user", JSON.stringify(user));
       sessionStorage.setItem("userId", JSON.stringify(user.userId));
       sessionStorage.setItem("token", JSON.stringify(user.token));
@@ -75,9 +74,7 @@ export default createStore({
         token: "",
         firstName: "",
       };
-      sessionStorage.removeItem("firstName");
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("userId");
+      sessionStorage.clear();
     },
 
     creatingPost(state, postInfos) {
@@ -130,6 +127,10 @@ export default createStore({
           .then((response) => {
             commit("setStatus", "");
             commit("logUser", response.data);
+            instance.defaults.headers.common["Authorization"] =
+              "BEARER " + this.state.user.token;
+            instance.defaults.headers.common["Content-Type"] =
+              "multipart/form-data";
             resolve(response.data);
           })
           .catch((error) => {
@@ -140,11 +141,11 @@ export default createStore({
     },
 
     getUserInfos({ commit }) {
-      instance.defaults.headers.common["Authorization"] =
-        "BEARER " + this.state.user.token;
       instance
         .get("/auth/users/" + this.state.user.userId)
         .then((response) => {
+          console.log("wow");
+
           commit("userInfos", response.data);
         })
         .catch((error) => {
@@ -165,10 +166,6 @@ export default createStore({
         formData.append("userId", this.state.postInfos.userId);
       }
       return new Promise((resolve, reject) => {
-        instance.defaults.headers.common["Authorization"] =
-          "BEARER " + this.state.user.token;
-        instance.defaults.headers.common["Content-Type"] =
-          "multipart/form-data";
         instance
           .post("/posts", formData)
           .then((response) => {
@@ -187,8 +184,6 @@ export default createStore({
     },
 
     getPosts({ commit }) {
-      instance.defaults.headers.common["Authorization"] =
-        "BEARER " + this.state.user.token;
       instance
         .get("/posts")
         .then((response) => {
@@ -201,8 +196,6 @@ export default createStore({
 
     deletePost({ commit }, postId) {
       return new Promise((resolve, reject) => {
-        instance.defaults.headers.common["Authorization"] =
-          "BEARER " + this.state.user.token;
         instance
           .delete("/posts/" + postId)
           .then((response) => {
@@ -216,8 +209,6 @@ export default createStore({
 
     getProfile({ commit }, profileId) {
       return new Promise((resolve, reject) => {
-        instance.defaults.headers.common["Authorization"] =
-          "BEARER " + this.state.user.token;
         instance
           .get("/auth/users/" + profileId)
           .then((response) => {
@@ -258,10 +249,6 @@ export default createStore({
         formData.append("currentAvatar", newData.currentAvatar);
       }
       return new Promise((resolve, reject) => {
-        instance.defaults.headers.common["Authorization"] =
-          "BEARER " + this.state.user.token;
-        instance.defaults.headers.common["Content-Type"] =
-          "multipart/form-data";
         instance
           .put("/auth/users/" + this.state.userInfos.userId, formData)
           .then((response) => {
@@ -276,8 +263,6 @@ export default createStore({
 
     deleteProfile({ commit }, profileId) {
       return new Promise((resolve, reject) => {
-        instance.defaults.headers.common["Authorization"] =
-          "BEARER " + this.state.user.token;
         instance
           .delete("/auth/users/" + profileId)
           .then((response) => {
@@ -291,8 +276,6 @@ export default createStore({
 
     getOnePost({ commit }, postId) {
       return new Promise((resolve, reject) => {
-        instance.defaults.headers.common["Authorization"] =
-          "BEARER " + this.state.user.token;
         instance
           .get("/posts/" + postId)
           .then((response) => {
@@ -306,8 +289,6 @@ export default createStore({
     },
     getComments({ commit }, postId) {
       return new Promise((resolve, reject) => {
-        instance.defaults.headers.common["Authorization"] =
-          "BEARER " + this.state.user.token;
         instance
           .get("/comments/posts/" + postId)
           .then((response) => {
@@ -321,8 +302,6 @@ export default createStore({
 
     postComment({ commit }, commentInfos) {
       return new Promise((resolve, reject) => {
-        instance.defaults.headers.common["Authorization"] =
-          "BEARER " + this.state.user.token;
         instance
           .post("/comments", commentInfos)
           .then((response) => {
@@ -337,8 +316,6 @@ export default createStore({
 
     deleteComment({ commit }, commentId) {
       return new Promise((resolve, reject) => {
-        instance.defaults.headers.common["Authorization"] =
-          "BEARER " + this.state.user.token;
         instance
           .delete("/comments/" + commentId)
           .then((response) => {
@@ -353,8 +330,6 @@ export default createStore({
     like({ commit }, postId) {
       console.log(this.state.user.userId);
       return new Promise((resolve, reject) => {
-        instance.defaults.headers.common["Authorization"] =
-          "BEARER " + this.state.user.token;
         instance
           .post("/posts/like/" + postId, { userId: this.state.user.userId })
           .then((response) => {

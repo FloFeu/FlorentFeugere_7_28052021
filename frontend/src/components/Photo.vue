@@ -29,6 +29,7 @@ export default {
   align-items: center;
   background: rgba(0, 0, 0, 1);
   z-index: 1;
+
   .photo__overlay {
     position: fixed;
     bottom: 0;
@@ -40,10 +41,9 @@ export default {
     margin: 1em;
     @include desktop {
       width: fit-content;
-      img {
-        width: 100%;
-       
-      }
+    }
+    img {
+      max-width: 95%;
     }
   }
 }

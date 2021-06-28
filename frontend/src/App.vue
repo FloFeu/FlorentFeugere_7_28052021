@@ -14,7 +14,7 @@ export default {
 
 * {
   color: $white;
-  font-family: Roboto;
+  font-family: Roboto, Sans-Serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;

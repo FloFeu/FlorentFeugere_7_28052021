@@ -23,12 +23,12 @@
             alt="post attachment"
             @click="togglePopUp"
           />
+        </div>
           <Photo
             :revele="revele"
             :togglePopUp="togglePopUp"
             :photo="post.postAttachment"
           />
-        </div>
       </div>
       <div class="line-break"></div>
       <div class="postDetails__postInfos">
@@ -219,6 +219,13 @@ export default {
       justify-content: center;
       img {
         border-radius: 20px;
+        max-width: 350px;
+        @include tablet {
+          max-width: 650px;
+        }
+        @include desktop {
+          max-width: 580px;
+        }
       }
     }
   }

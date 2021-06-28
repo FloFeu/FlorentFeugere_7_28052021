@@ -32,7 +32,8 @@
               v-else
               :style="{
                 'background-image': `url(${previewImage})`,
-                'background-size': '100px',
+                'background-size': 'contain',
+                'background-repeat': 'no-repeat'
               }"
               class="profile__top__img editProfile__top__file__img"
             ></div>

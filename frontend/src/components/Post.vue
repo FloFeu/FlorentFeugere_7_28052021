@@ -246,7 +246,6 @@ export default {
         -webkit-line-clamp: 5;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        padding-left: 1em;
       }
       &--attachment {
         width: 100%;
