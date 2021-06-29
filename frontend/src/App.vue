@@ -35,7 +35,7 @@ body {
   @include tablet {
     margin-top: 4em;
   }
-  @include desktop{
+  @include desktop {
     margin-top: 10em;
   }
 

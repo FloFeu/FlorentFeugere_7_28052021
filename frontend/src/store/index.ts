@@ -144,8 +144,6 @@ export default createStore({
       instance
         .get("/auth/users/" + this.state.user.userId)
         .then((response) => {
-          console.log("wow");
-
           commit("userInfos", response.data);
         })
         .catch((error) => {
@@ -199,12 +197,12 @@ export default createStore({
         instance
           .delete("/posts/" + postId)
           .then((response) => {
-            resolve(response.data)
+            resolve(response.data);
           })
           .catch((error) => {
-            reject(error)
+            reject(error);
           });
-      })
+      });
     },
 
     getProfile({ commit }, profileId) {
@@ -266,20 +264,6 @@ export default createStore({
         instance
           .delete("/auth/users/" + profileId)
           .then((response) => {
-            resolve(response.data)
-          })
-          .catch((error) => {
-            reject(error)
-          });
-      })
-    },
-
-    getOnePost({ commit }, postId) {
-      return new Promise((resolve, reject) => {
-        instance
-          .get("/posts/" + postId)
-          .then((response) => {
-            commit('creatingPost', response.data);
             resolve(response.data);
           })
           .catch((error) => {
@@ -287,6 +271,33 @@ export default createStore({
           });
       });
     },
+
+    getOnePost({ commit }, postId) {
+      return new Promise((resolve, reject) => {
+        instance
+          .get("/posts/" + postId)
+          .then((response) => {
+            commit("creatingPost", response.data);
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+
+    whoLiked({ commit }, postId) {
+      return new Promise((resolve, reject) => {
+        instance.get(`/posts/${postId}/likes`)
+          .then((response) => {
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+      })
+    },
+
     getComments({ commit }, postId) {
       return new Promise((resolve, reject) => {
         instance
@@ -319,27 +330,26 @@ export default createStore({
         instance
           .delete("/comments/" + commentId)
           .then((response) => {
-            resolve(response.data)
+            resolve(response.data);
           })
           .catch((error) => {
-            reject(error)
+            reject(error);
           });
-      })
+      });
     },
 
     like({ commit }, postId) {
-      console.log(this.state.user.userId);
       return new Promise((resolve, reject) => {
         instance
           .post("/posts/like/" + postId, { userId: this.state.user.userId })
           .then((response) => {
-            resolve(response.data)
+            resolve(response.data);
           })
           .catch((error) => {
-            reject(error)
+            reject(error);
           });
-      })
-    }
+      });
+    },
   },
 
   getters: {

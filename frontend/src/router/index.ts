@@ -46,7 +46,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "EditProfile",
     component: EditProfile,
     beforeEnter: authGuard,
-  }
+  },
 ];
 
 const router = createRouter({

@@ -27,7 +27,9 @@
         >
           <b>{{ post.firstName + " " + post.lastName }} </b>
         </router-link>
-        <span v-if="userCheck & !admin" @click="togglePopUp" class="popUp">...</span>
+        <span v-if="userCheck & !admin" @click="togglePopUp" class="popUp"
+          >...</span
+        >
         <PopUp
           @deletePost="deletePost"
           :revele="revele"
@@ -45,6 +47,7 @@
         <div>
           <p class="post__content__msg--msg">{{ post.msg }}</p>
         </div>
+
         <div v-if="post.PostAttachment" class="post__content__msg--attachment">
           <img :src="post.PostAttachment" alt="attachment" />
         </div>
@@ -54,6 +57,13 @@
 
         <p>
           <font-awesome-icon
+            v-if="hasLiked"
+            @click="like(post.postId)"
+            class="icon"
+            :icon="['fas', 'thumbs-down']"
+          />
+          <font-awesome-icon
+            v-else
             @click="like(post.postId)"
             class="icon"
             :icon="['fas', 'thumbs-up']"
@@ -85,6 +95,7 @@ export default {
       revele: false,
       userCheck: false,
       admin: false,
+      hasLiked: false,
     };
   },
 
@@ -111,7 +122,6 @@ export default {
           this.$store
             .dispatch("deletePost", this.post.postId)
             .then((response) => {
-              console.log(response);
               this.$emit("refresh");
               this.togglePopUp();
             })
@@ -144,7 +154,6 @@ export default {
         this.$store
           .dispatch("deletePost", this.post.postId)
           .then((response) => {
-            console.log(response);
             this.$emit("refresh");
           })
           .catch((error) => {
@@ -153,12 +162,20 @@ export default {
       }
     },
 
+    whoLiked() {
+      this.$store.dispatch("whoLiked", this.post.postId).then((response) => {
+        if (response === true) {
+          return (this.hasLiked = true);
+        }
+      });
+    },
+
     like(postId) {
       this.$store
         .dispatch("like", postId)
         .then((response) => {
-          console.log(response);
           this.$emit("refresh");
+          this.hasLiked = !this.hasLiked;
         })
         .catch((error) => {
           console.log(error);
@@ -167,6 +184,7 @@ export default {
   },
 
   created() {
+    this.whoLiked();
     this.checkUser();
     this.checkAdmin();
   },
@@ -215,7 +233,7 @@ export default {
     &__head {
       display: flex;
       justify-content: space-between;
-      .popUp{
+      .popUp {
         cursor: pointer;
       }
       .icon {

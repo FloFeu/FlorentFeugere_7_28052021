@@ -19,7 +19,7 @@ export default {
   methods: {
     deletePost() {
       this.$emit("deletePost");
-    }
+    },
   },
 };
 </script>
@@ -56,7 +56,7 @@ export default {
       position: absolute;
       top: 10px;
       right: 10px;
-      color: $error;  
+      color: $error;
     }
     p {
       padding: 1em 0;

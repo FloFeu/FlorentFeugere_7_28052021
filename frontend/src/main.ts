@@ -10,9 +10,10 @@ import {
   faArrowLeft,
   faPlus,
   faThumbsUp,
+  faThumbsDown,
   faEdit,
   faUser,
-  faPowerOff
+  faPowerOff,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -20,6 +21,7 @@ import store from "./store";
 
 library.add(
   faThumbsUp,
+  faThumbsDown,
   faComment,
   faBars,
   faPlusSquare,

@@ -118,7 +118,6 @@ export default {
       }
     },
     getProfile() {
-      console.log(this.id);
       this.$store
         .dispatch("getProfile", this.id)
         .then(() => {
@@ -153,9 +152,8 @@ export default {
 @import "@/assets/sass/main";
 
 .profile {
-  
-  .wrapper{
-    @include desktop{
+  .wrapper {
+    @include desktop {
       width: 600px;
       margin-left: auto;
       margin-right: auto;

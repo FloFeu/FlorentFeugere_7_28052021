@@ -54,7 +54,6 @@ exports.login = (req, res, next) => {
 
     user.findOneByMail()
         .then(([rows, fields]) => {
-            console.log(rows)
             if (rows.length === 0) {
                 return res.status(401).json({ error: `Utilisateur non trouvé: ${req.body.email} !` })
             }
@@ -101,7 +100,6 @@ exports.findOneByName = (req, res, next) => {
 
     user.findByName()
         .then(([users, fields]) => {
-            console.log(users);
             if (users.length === 0) {
                 return res.status(401).json({ error: 'Aucun utilisateur n\'a été trouvé' })
             }
@@ -116,7 +114,6 @@ exports.findOneById = (req, res, next) => {
     });
     user.findOneById()
         .then(([user, fields]) => {
-            console.log(user);
             if (user.length === 0) {
                 return res.status(401).json({ error: 'Aucune utilisateur n\'a été trouvé !' })
             }
@@ -155,7 +152,6 @@ exports.deleteOne = (req, res, next) => {
 
     user.findOneById()
         .then(([users, fields]) => {
-            console.log(users);
             if (user.length === 0) {
                 return res.status(401).json({ error: 'Aucune utilisateur n\'a été trouvé !' })
             }

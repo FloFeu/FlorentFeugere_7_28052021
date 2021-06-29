@@ -24,17 +24,24 @@
             @click="togglePopUp"
           />
         </div>
-          <Photo
-            :revele="revele"
-            :togglePopUp="togglePopUp"
-            :photo="post.postAttachment"
-          />
+        <Photo
+          :revele="revele"
+          :togglePopUp="togglePopUp"
+          :photo="post.postAttachment"
+        />
       </div>
       <div class="line-break"></div>
       <div class="postDetails__postInfos">
         <span> {{ dateTime(post.postDate) }} </span>
         <p>
           <font-awesome-icon
+            v-if="hasLiked"
+            @click="like(post.postId)"
+            class="icon"
+            :icon="['fas', 'thumbs-down']"
+          />
+          <font-awesome-icon
+            v-else
             @click="like(post.postId)"
             class="icon"
             :icon="['fas', 'thumbs-up']"
@@ -85,6 +92,7 @@ export default {
       comments: [],
       newComment: "",
       revele: false,
+      hasLiked: false,
     };
   },
   props: {
@@ -153,10 +161,19 @@ export default {
         .dispatch("like", postId)
         .then(() => {
           this.fetchPost();
+          this.hasLiked = !this.hasLiked;
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+
+    whoLiked() {
+      this.$store.dispatch("whoLiked", this.id).then((response) => {
+        if (response === true) {
+          return (this.hasLiked = true);
+        }
+      });
     },
 
     togglePopUp() {
@@ -164,8 +181,8 @@ export default {
     },
   },
   created() {
-    console.log(this.$route.name);
     this.fetchPost();
+    this.whoLiked();
   },
 };
 </script>

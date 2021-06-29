@@ -8,8 +8,11 @@
     </div>
     <div class="comment__content">
       <div class="comment__content__header">
-        <router-link class="comment__content__header__username" :to="{ name: 'Profile', params: { id: comment.userId } }">
-            {{ comment.firstName + " " + comment.lastName }}
+        <router-link
+          class="comment__content__header__username"
+          :to="{ name: 'Profile', params: { id: comment.userId } }"
+        >
+          {{ comment.firstName + " " + comment.lastName }}
         </router-link>
         <span v-if="userCheck & !admin" @click="togglePopUp" class="popUp"
           >...</span
@@ -85,7 +88,6 @@ export default {
         this.$store
           .dispatch("deleteComment", commentId)
           .then((response) => {
-            console.log(response);
             this.$emit("commentDeleted");
             this.togglePopUp();
           })
@@ -104,7 +106,6 @@ export default {
         this.$store
           .dispatch("deleteComment", commentId)
           .then((response) => {
-            console.log(response);
             this.$emit("commentDeleted");
           })
           .catch((error) => {

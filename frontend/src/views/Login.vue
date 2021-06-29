@@ -149,7 +149,6 @@ export default {
         })
         .then((response) => {
           this.login();
-          console.log(response);
         })
         .catch((error) => {
           console.log(error);
@@ -163,7 +162,6 @@ export default {
         })
         .then((response) => {
           this.$router.push({ name: "Home" });
-          console.log(response);
         })
         .catch((error) => {
           console.log(error);
@@ -182,7 +180,7 @@ export default {
   margin-right: auto;
   width: 90%;
   max-width: 600px;
-  @include desktop{
+  @include desktop {
     margin-top: 5em;
   }
 }

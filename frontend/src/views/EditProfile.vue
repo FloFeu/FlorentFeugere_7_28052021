@@ -33,7 +33,7 @@
               :style="{
                 'background-image': `url(${previewImage})`,
                 'background-size': 'contain',
-                'background-repeat': 'no-repeat'
+                'background-repeat': 'no-repeat',
               }"
               class="profile__top__img editProfile__top__file__img"
             ></div>
@@ -88,9 +88,6 @@ export default {
       user: "userInfos",
     }),
   },
-  created() {
-    console.log(this.user);
-  },
   methods: {
     onFileSelected(event) {
       this.selectedAvatar = event.target.files[0];
@@ -99,8 +96,6 @@ export default {
         this.previewImage = e.target.result;
       };
       reader.readAsDataURL(this.selectedAvatar);
-      console.log(this.selectedAvatar);
-      console.log(this.previewImage);
     },
     modifyProfile() {
       let editData = {};
@@ -118,7 +113,6 @@ export default {
       this.$store
         .dispatch("modifyProfile", editData)
         .then((response) => {
-          console.log(response);
           this.$router.push({
             name: "Profile",
             params: { id: this.$store.state.userInfos.userId },
@@ -136,7 +130,6 @@ export default {
         this.$store
           .dispatch("deleteProfile", this.user.userId)
           .then((response) => {
-            console.log(response);
             this.$store.commit("logOut");
             this.$router.push({ name: "Login" });
           })

@@ -90,7 +90,6 @@ export default {
         this.previewImage = e.target.result;
       };
       reader.readAsDataURL(this.selectedFile);
-      console.log(this.selectedFile);
     },
     getPosts() {
       this.$store
@@ -138,7 +137,6 @@ export default {
       .then(() => {
         (this.user.firstName = this.$store.state.userInfos.firstName),
           (this.user.lastName = this.$store.state.userInfos.lastName);
-
       })
       .catch((error) => {
         console.log(error);

@@ -86,10 +86,10 @@ nav {
       p {
         font-size: 16px;
         text-decoration: none;
-        span{
+        span {
           padding-right: 1em;
           display: none;
-          @include tablet{
+          @include tablet {
             display: inline-block;
           }
         }
