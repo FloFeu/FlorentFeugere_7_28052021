@@ -10,6 +10,7 @@ module.exports = class User {
     password = '';
     bio = '';
     isAdmin = 0;
+    avatar = '';
 
     constructor(user = null) {
         if (user != null) {
@@ -20,11 +21,12 @@ module.exports = class User {
             if (user.password) this.password = user.password;
             if (user.bio) this.bio = user.bio;
             if (user.isAdmin) this.isAdmin = user.isAdmin;
+            if (user.avatar) this.avatar = user.avatar;
         }
     };
 
     add() {
-        const sql = `INSERT INTO users (userId, firstName, lastName, email, password, bio, isAdmin) VALUES(NULL, "${this.firstName}", "${this.lastName}", "${this.email}", "${this.password}", "${this.bio}","${this.isAdmin}")`;
+        const sql = `INSERT INTO users (userId, firstName, lastName, email, password, bio, isAdmin, avatar) VALUES(NULL, "${this.firstName}", "${this.lastName}", "${this.email}", "${this.password}", "${this.bio}","${this.isAdmin}" ,"${this.avatar}")`;
         console.log(sql);
         return executeSql(sql);
     };
@@ -41,7 +43,7 @@ module.exports = class User {
     };
 
     findOneById() {
-        const sql = `SELECT * FROM users WHERE userId="${this.userId}"`;
+        const sql = `SELECT users.userId, firstName, lastName, email, bio, avatar, isAdmin FROM users WHERE users.userId="${this.userId}"`;
         console.log(sql);
         return executeSql(sql);
     }
@@ -53,10 +55,16 @@ module.exports = class User {
     };
 
     modifyOne() {
-        const sql = `UPDATE users SET bio="${this.bio}" WHERE userId="${this.userId}"`;
+        const sql = `UPDATE users SET firstName="${this.firstName}", bio="${this.bio}", avatar="${this.avatar}" WHERE userId="${this.userId}"`;
         console.log(sql);
         return executeSql(sql);
     };
+
+    findFiles() {
+        const sql = `SELECT PostAttachment, users.userId FROM posts JOIN users ON posts.userId = users.userId WHERE users.userId="${this.userId}"`;
+        console.log(sql);
+        return executeSql(sql);
+    }
 
     deleteOne() {
         const sql = `DELETE FROM users WHERE userId="${this.userId}"`;

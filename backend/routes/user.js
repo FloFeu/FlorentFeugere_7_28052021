@@ -5,6 +5,7 @@ const router = express.Router();
 const {body} = require('express-validator');
 const userCtrl = require('../controllers/user');
 const auth = require('../middleware/auth');
+const multer = require('../middleware/multer-config');
 
 //localhost:3000/api/auth/...
 
@@ -43,8 +44,9 @@ router.post('/login', [
 router.get('/users', auth, userCtrl.findAll);
 router.post('/users', auth, userCtrl.findOneByName);
 router.get('/users/:id', auth, userCtrl.findOneById);
-router.put('/users/:id', auth, userCtrl.modifyOne);
+router.put('/users/:id', auth, multer, userCtrl.modifyOne);
 router.delete('/users/:id', auth, userCtrl.deleteOne);
 
 
 module.exports = router;
+

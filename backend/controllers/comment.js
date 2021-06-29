@@ -11,7 +11,6 @@ exports.createComment = (req, res, next) => {
         try {
             const token = req.headers.authorization.split(' ')[1];
             const decodedToken = jwt.verify(token, process.env.TOKEN);
-            console.log(decodedToken);
             const reqUserId = decodedToken.userId;
 
             if (reqUserId) {
@@ -22,9 +21,11 @@ exports.createComment = (req, res, next) => {
                 });
 
                 comment.add()
-                    .then(() => res.status(201).json({ message: 'Commentaire publié ! ' }))
-                    .catch(err => res.status(400).json({ error })) ;
-            };
+                    .then(() => {
+                        res.status(200).json({ message: 'Commentaire ajouté :' })
+                    })
+                    .catch((error) => res.status(401).json({ error }))
+            }
         }
         catch (error) {
             res.status(400).json({ error })

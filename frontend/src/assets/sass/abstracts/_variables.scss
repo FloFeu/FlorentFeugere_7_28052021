@@ -1,0 +1,40 @@
+$black: #242526;
+$white: #FFF;
+$background: #18191A;
+$surface: #353535;
+
+$primary-color: #BB86FC;
+$secondary-color: #028192;
+$error: #CF6679;
+
+@mixin line-break {
+        align-items: center;
+        border-bottom: 1px solid #dadde1;
+        display: flex;
+        margin: 20px 16px;
+        text-align: center;
+};
+
+@mixin profile-img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        object-position: top;
+        border-radius: 50%;
+        margin-right: 1em;
+};
+
+$tablet-width: 641px;
+$desktop-width: 1025px;
+
+@mixin tablet {
+	@media (min-width: $tablet-width) {
+        @content;
+	}
+}
+
+@mixin desktop {
+	@media (min-width: $desktop-width) {
+        @content;
+	}
+}
