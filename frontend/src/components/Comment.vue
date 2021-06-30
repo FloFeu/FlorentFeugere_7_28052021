@@ -87,7 +87,7 @@ export default {
       if (result) {
         this.$store
           .dispatch("deleteComment", commentId)
-          .then((response) => {
+          .then(() => {
             this.$emit("commentDeleted");
             this.togglePopUp();
           })
@@ -105,7 +105,7 @@ export default {
       if (result) {
         this.$store
           .dispatch("deleteComment", commentId)
-          .then((response) => {
+          .then(() => {
             this.$emit("commentDeleted");
           })
           .catch((error) => {

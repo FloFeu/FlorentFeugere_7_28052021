@@ -288,14 +288,15 @@ export default createStore({
 
     whoLiked({ commit }, postId) {
       return new Promise((resolve, reject) => {
-        instance.get(`/posts/${postId}/likes`)
+        instance
+          .get(`/posts/${postId}/likes`)
           .then((response) => {
             resolve(response.data);
           })
           .catch((error) => {
             reject(error);
-          })
-      })
+          });
+      });
     },
 
     getComments({ commit }, postId) {

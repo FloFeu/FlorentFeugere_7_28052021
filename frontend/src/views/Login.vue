@@ -55,7 +55,7 @@
         Adresse mail et/ou mot de passe invalide.
       </div>
       <div class="form-row" v-if="mode == 'create' && status == 'error_create'">
-        Adresse mail déjà utilisée.
+        Adresse mail déjà utilisée ou mot de passe invalide.
       </div>
       <div class="form-row__instructions" v-if="mode == 'create' && focus">
         Votre mot de passe doit contenir 8 à 15 caractères, au moins une
