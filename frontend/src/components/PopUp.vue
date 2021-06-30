@@ -44,6 +44,9 @@ export default {
     top: 0;
   }
   &__card {
+    @include desktop {
+      width: 600px;
+    }
     background-color: $background;
     padding: 0.7em 1em;
     position: fixed;

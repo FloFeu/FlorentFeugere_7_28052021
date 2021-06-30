@@ -62,6 +62,7 @@ nav {
   position: sticky;
   top: 0;
   background-color: darken($surface, 5%);
+  z-index: 1;
 
   .logo {
     width: 200px;
