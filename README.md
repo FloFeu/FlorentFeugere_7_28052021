@@ -35,4 +35,4 @@ Le front a été réalisé à l'aide du framework Vue 3.
  ##  :eyes: Logs de l'admin :eyes:
 
  - id:  admin@admin.fr
- - mdp :Super@dmin1
+ - mdp: Super@dmin1
