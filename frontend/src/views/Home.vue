@@ -231,6 +231,7 @@ export default {
         padding: 0.4em;
         border-radius: 15px;
         border: none;
+        cursor: pointer;
       }
     }
   }

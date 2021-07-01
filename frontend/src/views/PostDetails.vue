@@ -35,13 +35,7 @@
         <span> {{ dateTime(post.postDate) }} </span>
         <p>
           <font-awesome-icon
-            v-if="hasLiked"
-            @click="like(post.postId)"
-            class="icon"
-            :icon="['fas', 'thumbs-down']"
-          />
-          <font-awesome-icon
-            v-else
+            :class="{ hasLiked: hasLiked }"
             @click="like(post.postId)"
             class="icon"
             :icon="['fas', 'thumbs-up']"
@@ -145,7 +139,7 @@ export default {
         })
         .then(() => {
           this.newComment = "";
-          this.fetchComments();
+          this.fetchPost();
         })
         .catch((error) => {
           console.log(error);
@@ -260,7 +254,13 @@ export default {
       color: $primary-color;
     }
     .icon {
+      cursor: pointer;
       margin-right: 5px;
+      path {
+        fill: lighten($surface, 25%);
+      }
+    }
+    .hasLiked {
       path {
         fill: $primary-color;
       }

@@ -5,6 +5,11 @@ const instance = axios.create({
   baseURL: "http://localhost:3000/api",
 });
 
+function setDefaultHeader() {
+  instance.defaults.headers.common["Authorization"] = "Bearer " + JSON.parse(sessionStorage.getItem("token") || "{}");
+  instance.defaults.headers.common["Content-Type"] = "multipart/form-data";
+};
+
 let User = JSON.parse(sessionStorage.getItem("user") || "{}");
 if (!User) {
   User = {
@@ -127,10 +132,6 @@ export default createStore({
           .then((response) => {
             commit("setStatus", "");
             commit("logUser", response.data);
-            instance.defaults.headers.common["Authorization"] =
-              "BEARER " + this.state.user.token;
-            instance.defaults.headers.common["Content-Type"] =
-              "multipart/form-data";
             resolve(response.data);
           })
           .catch((error) => {
@@ -141,6 +142,7 @@ export default createStore({
     },
 
     getUserInfos({ commit }) {
+      setDefaultHeader();
       instance
         .get("/auth/users/" + this.state.user.userId)
         .then((response) => {
@@ -164,6 +166,7 @@ export default createStore({
         formData.append("userId", this.state.postInfos.userId);
       }
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .post("/posts", formData)
           .then((response) => {
@@ -182,6 +185,7 @@ export default createStore({
     },
 
     getPosts({ commit }) {
+      setDefaultHeader();
       instance
         .get("/posts")
         .then((response) => {
@@ -194,6 +198,7 @@ export default createStore({
 
     deletePost({ commit }, postId) {
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .delete("/posts/" + postId)
           .then((response) => {
@@ -207,6 +212,7 @@ export default createStore({
 
     getProfile({ commit }, profileId) {
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .get("/auth/users/" + profileId)
           .then((response) => {
@@ -221,6 +227,7 @@ export default createStore({
 
     getProfilePosts({ commit }, profileId) {
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .get("/posts/users/" + profileId)
           .then((response) => {
@@ -247,6 +254,7 @@ export default createStore({
         formData.append("currentAvatar", newData.currentAvatar);
       }
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .put("/auth/users/" + this.state.userInfos.userId, formData)
           .then((response) => {
@@ -261,6 +269,7 @@ export default createStore({
 
     deleteProfile({ commit }, profileId) {
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .delete("/auth/users/" + profileId)
           .then((response) => {
@@ -274,6 +283,7 @@ export default createStore({
 
     getOnePost({ commit }, postId) {
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .get("/posts/" + postId)
           .then((response) => {
@@ -288,6 +298,7 @@ export default createStore({
 
     whoLiked({ commit }, postId) {
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .get(`/posts/${postId}/likes`)
           .then((response) => {
@@ -301,6 +312,7 @@ export default createStore({
 
     getComments({ commit }, postId) {
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .get("/comments/posts/" + postId)
           .then((response) => {
@@ -314,6 +326,7 @@ export default createStore({
 
     postComment({ commit }, commentInfos) {
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .post("/comments", commentInfos)
           .then((response) => {
@@ -328,6 +341,7 @@ export default createStore({
 
     deleteComment({ commit }, commentId) {
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .delete("/comments/" + commentId)
           .then((response) => {
@@ -341,6 +355,7 @@ export default createStore({
 
     like({ commit }, postId) {
       return new Promise((resolve, reject) => {
+        setDefaultHeader();
         instance
           .post("/posts/like/" + postId, { userId: this.state.user.userId })
           .then((response) => {

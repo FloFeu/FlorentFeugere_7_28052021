@@ -57,13 +57,7 @@
 
         <p>
           <font-awesome-icon
-            v-if="hasLiked"
-            @click="like(post.postId)"
-            class="icon"
-            :icon="['fas', 'thumbs-down']"
-          />
-          <font-awesome-icon
-            v-else
+            :class="{ hasLiked: hasLiked }"
             @click="like(post.postId)"
             class="icon"
             :icon="['fas', 'thumbs-up']"
@@ -301,6 +295,11 @@ export default {
           path {
             fill: $primary-color;
           }
+        }
+      }
+      .hasLiked {
+        path {
+          fill: $primary-color;
         }
       }
     }

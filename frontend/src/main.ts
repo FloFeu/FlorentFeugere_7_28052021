@@ -10,7 +10,6 @@ import {
   faArrowLeft,
   faPlus,
   faThumbsUp,
-  faThumbsDown,
   faEdit,
   faUser,
   faPowerOff,
@@ -21,7 +20,6 @@ import store from "./store";
 
 library.add(
   faThumbsUp,
-  faThumbsDown,
   faComment,
   faBars,
   faPlusSquare,
