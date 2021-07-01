@@ -27,7 +27,7 @@ Pour lancer le serveur
 
 Le front a été réalisé à l'aide du framework Vue 3. 
 
- - Installer les packages du back avec un `npm install`.
+ - Installer les packages du front avec un `npm install`.
  - Lancer le front en faisant `npm run serve`
  
  :clap: **Si tout est bon, vous pouvez accéder au projet via l'adresse [localhost:8080](http://localhost:8080/#/)** :clap:
