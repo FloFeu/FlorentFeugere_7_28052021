@@ -20,7 +20,7 @@ La base de donnée est fournie (fichier `groupomania_db.sql`) et a été créée
 Pour lancer le serveur
 
  - Installer les packages du back avec un `npm install`
- - Renommer le fichier `.env-prod` en `.env`. Ajouter si nécessaire le mot de passe nécessaire pour la connexion à votre  serveur MySQL. Le token est laissé volontairement afin de pouvoir se connecter avec l'utilisateur admin créé par mes soins.
+ - Renommer le fichier `.env-prod` en `.env`. Ajouter si nécessaire le mot de passe requis pour la connexion à votre  serveur MySQL. Le token est laissé volontairement afin de pouvoir se connecter avec l'utilisateur admin créé par mes soins.
  - Lancer le back en faisant `nodemon`
 
 ## :clipboard:  Frontend :clipboard:
