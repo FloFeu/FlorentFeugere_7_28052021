@@ -46,24 +46,6 @@ exports.getComments = (req, res, next) => {
         });
 };
 
-exports.modifyComment = (req, res, next) => {
-    const comment = new Comment({
-        commentId: req.params.id,
-        commentMsg: req.body.commentMsg
-    })
-
-    comment.findOne()
-        .then(([rows, fields]) => {
-            if (rows.length === 0) {
-                return res.status(401).json({ error: 'Commentaire introuvable !' })
-            }
-            comment.modifyOne()
-                .then(() => {
-                    res.status(200).json({ message: 'Commentaire correctement modifié.' })
-                }).catch(err => res.status(400).json({ error }));
-        })
-};
-
 exports.deleteComment = (req, res, next) => {
     const comment = new Comment({
         commentId: req.params.id

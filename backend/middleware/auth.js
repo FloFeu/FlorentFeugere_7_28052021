@@ -9,6 +9,7 @@ module.exports = (req, res, next) => {
         const userId = decodedToken.userId;
         const isAdmin = decodedToken.isAdmin;
 
+        // Vérification du status d'admin
         if ( isAdmin === 0 ) {
             if ( req.body.userId && req.body.userId !== userId ) {
                 throw 'User Id non valable !'}

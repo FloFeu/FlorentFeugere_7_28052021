@@ -60,18 +60,6 @@ exports.getPostsByUser = (req, res, next) => {
         })
 };
 
-exports.modifyPost = (req, res, next) => {
-    const post = new Post({
-        postId: req.params.id,
-        msg: req.body.msg,
-        postAttachment: req.body.postAttachment
-    });
-
-    post.modifyOne()
-        .then(() => res.status(200).json({ message: 'Votre post à bien été modifié.' }))
-        .catch(error => res.status(400).json({ error }));
-};
-
 exports.deletePost = (req, res, next) => {
     const post = new Post({
         postId: req.params.id

@@ -36,12 +36,6 @@ module.exports = class Comment {
         return executeSql(sql);
     }
 
-    modifyOne() {
-        const sql = `UPDATE comments SET comment="${this.commentMsg}" WHERE commentId="${this.commentId}"`;
-        console.log(sql);
-        return executeSql(sql);
-    };
-
     deleteOne() {
         const sql = `DELETE FROM comments WHERE commentId="${this.commentId}"`;
         console.log(sql);

@@ -48,12 +48,6 @@ module.exports = class Post {
         return executeSql(sql);
     };
 
-    modifyOne() {
-        const sql = `UPDATE posts SET msg="${this.msg}", postAttachment="${this.postAttachment}" WHERE postId=${this.postId}`;
-        console.log(sql);
-        return executeSql(sql);
-    };
-
     deleteOne() {
         const sql = `DELETE FROM posts WHERE postId="${this.postId}"`;
         console.log(sql);

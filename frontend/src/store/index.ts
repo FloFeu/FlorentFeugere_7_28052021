@@ -6,9 +6,10 @@ const instance = axios.create({
 });
 
 function setDefaultHeader() {
-  instance.defaults.headers.common["Authorization"] = "Bearer " + JSON.parse(sessionStorage.getItem("token") || "{}");
+  instance.defaults.headers.common["Authorization"] =
+    "Bearer " + JSON.parse(sessionStorage.getItem("token") || "{}");
   instance.defaults.headers.common["Content-Type"] = "multipart/form-data";
-};
+}
 
 let User = JSON.parse(sessionStorage.getItem("user") || "{}");
 if (!User) {
@@ -247,11 +248,13 @@ export default createStore({
         formData.append("firstName", newData.firstName);
         formData.append("bio", newData.bio);
         formData.append("currentAvatar", newData.currentAvatar);
+        formData.append("userId", this.state.user.userId);
       } else {
         formData.append("firstName", newData.firstName);
         formData.append("bio", newData.bio);
         formData.append("avatar", newData.selectedAvatar);
         formData.append("currentAvatar", newData.currentAvatar);
+        formData.append("userId", this.state.user.userId);
       }
       return new Promise((resolve, reject) => {
         setDefaultHeader();

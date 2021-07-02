@@ -6,7 +6,13 @@ const {body} = require('express-validator');
 const userCtrl = require('../controllers/user');
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
+const rateLimit = require('express-rate-limit')
 
+//Limite de création de comptes fixée à 10 toutes les 2 minutes
+const createAccountLimiter = rateLimit({
+    windowsM: 2 * 60 * 1000,
+    max: 10
+})
 //localhost:3000/api/auth/...
 
 router.post('/signup', [
@@ -28,7 +34,7 @@ router.post('/signup', [
         .notEmpty()
         .trim()
         .isLength({ min: 6 }),
-], userCtrl.signup);
+], createAccountLimiter, userCtrl.signup);
 
 router.post('/login', [
     body('email', "Adresse email invalide")
