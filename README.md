@@ -31,6 +31,8 @@ Le front a été réalisé à l'aide du framework Vue 3.
  - Lancer le front en faisant `npm run serve`
  
  :clap: **Si tout est bon, vous pouvez accéder au projet via l'adresse [localhost:8080](http://localhost:8080/#/)** :clap:
+ 
+ *Si le serveur n'écoute pas le port 3000, les images enregistrées dans la base de données et présentes dans le dossier images du back ne chargeront pas :confused:*
 
  ##  :eyes: Logs de l'admin :eyes:
 
