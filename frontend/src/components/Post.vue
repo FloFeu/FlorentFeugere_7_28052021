@@ -8,13 +8,13 @@
         <img
           v-if="post.avatar"
           :src="post.avatar"
-          alt="avatar"
+          alt="avatar user"
           class="post__img--img"
         />
         <img
           v-else
           src="@/assets/img/icon.png"
-          alt="avatar"
+          alt="avatar par défaut"
           class="post__img--img"
         />
       </router-link>
@@ -251,8 +251,6 @@ export default {
       text-decoration: none;
       display: flex;
       flex-direction: column;
-      text-align: justify;
-      text-justify: inter-word;
       &--msg {
         display: -webkit-box;
         -webkit-line-clamp: 5;

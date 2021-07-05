@@ -1,5 +1,6 @@
 "use strict";
 
+const mysql = require('mysql2');
 const executeSql = require('../services/db');
 
 module.exports = class Comment {
@@ -19,25 +20,25 @@ module.exports = class Comment {
     };
 
     add() {
-        const sql = `INSERT INTO comments (commentId, postId, comment, userId) VALUES (NULL, "${this.postId}", "${this.commentMsg}", "${this.userId}")`;
+        const sql = `INSERT INTO comments (commentId, postId, comment, userId) VALUES (NULL, '${this.postId}', ${mysql.escape(this.commentMsg)}, '${this.userId}')`;
         console.log(sql);
         return executeSql(sql);
     };
 
     getAll() {
-        const sql = `SELECT commentId, postId, commentDate, comment, comments.userId, users.userId, firstName, lastName, avatar FROM comments JOIN users ON comments.userId = users.userId WHERE postId="${this.postId}" ORDER BY commentDate ASC`;
+        const sql = `SELECT commentId, postId, commentDate, comment, comments.userId, users.userId, firstName, lastName, avatar FROM comments JOIN users ON comments.userId = users.userId WHERE postId='${this.postId}' ORDER BY commentDate ASC`;
         console.log(sql);
         return executeSql(sql);
     };
 
     findOne() {
-        const sql = `SELECT * FROM comments WHERE commentId="${this.commentId}"`;
+        const sql = `SELECT * FROM comments WHERE commentId='${this.commentId}'`;
         console.log(sql);
         return executeSql(sql);
     }
 
     deleteOne() {
-        const sql = `DELETE FROM comments WHERE commentId="${this.commentId}"`;
+        const sql = `DELETE FROM comments WHERE commentId='${this.commentId}'`;
         console.log(sql);
         return executeSql(sql);
     }

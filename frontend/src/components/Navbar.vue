@@ -1,7 +1,7 @@
 <template>
   <nav>
     <router-link :to="{ name: 'Home' }">
-      <img class="logo" src="@/assets/img/logo_white.svg" alt="logo" />
+      <img class="logo" src="@/assets/img/logo_white.svg" alt="logo groupomania" />
     </router-link>
     <ul class="menu__nav">
       <li>

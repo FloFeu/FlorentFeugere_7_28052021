@@ -34,9 +34,9 @@
 
       <div class="profile__infos">
         <div>
-          <p class="profile__infos__name">
+          <h1 class="profile__infos__name">
             {{ profile.firstName }} {{ profile.lastName }}
-          </p>
+          </h1>
           <p class="profile__infos__role">
             <span v-if="profile.isAdmin == 1">Admin</span>
             <span v-else> Membre</span>

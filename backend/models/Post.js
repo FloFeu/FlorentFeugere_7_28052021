@@ -1,5 +1,6 @@
 "use strict";
 
+const mysql = require('mysql2');
 const executeSql = require('../services/db');
 
 module.exports = class Post {
@@ -19,7 +20,7 @@ module.exports = class Post {
     };
 
     add() {
-        const sql = `INSERT INTO posts (postId, msg, postAttachment, userId) VALUES (NULL, "${this.msg}", "${this.postAttachment}", "${this.userId}")`;
+        const sql = `INSERT INTO posts (postId, msg, postAttachment, userId) VALUES (NULL, ${mysql.escape(this.msg)}, '${this.postAttachment}', '${this.userId}')`;
         console.log(sql);
         return executeSql(sql);
     };
@@ -31,43 +32,43 @@ module.exports = class Post {
     };
 
     hasLiked() {
-        const sql = `SELECT likes.userId FROM likes WHERE likes.postId = "${this.postId}" AND likes.userId = "${this.userId}"`;
+        const sql = `SELECT likes.userId FROM likes WHERE likes.postId = '${this.postId}' AND likes.userId = '${this.userId}'`;
         console.log(sql);
         return executeSql(sql);
     };
 
     getOne() {
-        const sql = `SELECT postId, msg, postDate, postAttachment, posts.userId, users.userId, firstName, lastName, avatar, (SELECT COUNT(*) FROM comments WHERE comments.postId = posts.postId) as postComments, (SELECT COUNT(*) FROM likes WHERE likes.postId = posts.postId) as postLikes FROM posts JOIN users ON posts.userId = users.userId WHERE postId=${this.postId}`;
+        const sql = `SELECT postId, msg, postDate, postAttachment, posts.userId, users.userId, firstName, lastName, avatar, (SELECT COUNT(*) FROM comments WHERE comments.postId = posts.postId) as postComments, (SELECT COUNT(*) FROM likes WHERE likes.postId = posts.postId) as postLikes FROM posts JOIN users ON posts.userId = users.userId WHERE postId='${this.postId}'`;
         console.log(sql);
         return executeSql(sql);
     };
 
     getAllPostsFromUserId() {
-        const sql = `SELECT postId, msg, postDate, PostAttachment, posts.userId, users.userId, firstName, lastName, avatar, (SELECT COUNT(*) FROM comments WHERE comments.postId = posts.postId) as postComments, (SELECT COUNT(*) FROM likes WHERE likes.postId = posts.postId) as postLikes FROM posts JOIN users ON posts.userId = users.userId WHERE posts.userId=${this.userId} ORDER BY postDate DESC`;
+        const sql = `SELECT postId, msg, postDate, PostAttachment, posts.userId, users.userId, firstName, lastName, avatar, (SELECT COUNT(*) FROM comments WHERE comments.postId = posts.postId) as postComments, (SELECT COUNT(*) FROM likes WHERE likes.postId = posts.postId) as postLikes FROM posts JOIN users ON posts.userId = users.userId WHERE posts.userId='${this.userId}' ORDER BY postDate DESC`;
         console.log(sql);
         return executeSql(sql);
     };
 
     deleteOne() {
-        const sql = `DELETE FROM posts WHERE postId="${this.postId}"`;
+        const sql = `DELETE FROM posts WHERE postId='${this.postId}'`;
         console.log(sql);
         return executeSql(sql);
     };
 
     checkLike() {
-        const sql = `SELECT likes.like, likes.userId FROM likes WHERE userId = "${this.userId}" AND postId = "${this.postId}"`;
+        const sql = `SELECT likes.like, likes.userId FROM likes WHERE userId = '${this.userId}' AND postId = '${this.postId}'`;
         console.log(sql);
         return executeSql(sql);
     };
 
     like() {
-        const sql = `INSERT INTO likes (userId, postId) VALUES ("${this.userId}", "${this.postId}")`;
+        const sql = `INSERT INTO likes (userId, postId) VALUES ('${this.userId}', '${this.postId}')`;
         console.log(sql);
         return executeSql(sql);
     };
 
     dislike(likeId) {
-        const sql = `DELETE FROM likes WHERE likes.like = ${likeId}`;
+        const sql = `DELETE FROM likes WHERE likes.like = '${likeId}'`;
         console.log(sql);
         return executeSql(sql);
     }

@@ -1,5 +1,5 @@
 "use strict";
-
+const mysql = require('mysql2')
 const executeSql = require('../services/db');
 
 module.exports = class User {
@@ -26,7 +26,7 @@ module.exports = class User {
     };
 
     add() {
-        const sql = `INSERT INTO users (userId, firstName, lastName, email, password, bio, isAdmin, avatar) VALUES(NULL, "${this.firstName}", "${this.lastName}", "${this.email}", "${this.password}", "${this.bio}","${this.isAdmin}" ,"${this.avatar}")`;
+        const sql = `INSERT INTO users (userId, firstName, lastName, email, password, bio, isAdmin, avatar) VALUES(NULL, '${this.firstName}', '${this.lastName}', ${mysql.escape(this.email)}, ${mysql.escape(this.password)}, '${this.bio}','${this.isAdmin}' ,'${this.avatar}')`;
         console.log(sql);
         return executeSql(sql);
     };
@@ -37,13 +37,13 @@ module.exports = class User {
     };
 
     findOneByMail() {
-        const sql = `SELECT * FROM users WHERE email='${this.email}'`;
+        const sql = `SELECT * FROM users WHERE email=${mysql.escape(this.email)}`;
         console.log(sql);
         return executeSql(sql);
     };
 
     findOneById() {
-        const sql = `SELECT users.userId, firstName, lastName, email, bio, avatar, isAdmin FROM users WHERE users.userId="${this.userId}"`;
+        const sql = `SELECT users.userId, firstName, lastName, email, bio, avatar, isAdmin FROM users WHERE users.userId='${this.userId}'`;
         console.log(sql);
         return executeSql(sql);
     }
@@ -55,19 +55,19 @@ module.exports = class User {
     };
 
     modifyOne() {
-        const sql = `UPDATE users SET firstName="${this.firstName}", bio="${this.bio}", avatar="${this.avatar}" WHERE userId="${this.userId}"`;
+        const sql = `UPDATE users SET firstName=${mysql.escape(this.firstName)}, bio=${mysql.escape(this.bio)}, avatar='${this.avatar}' WHERE userId='${this.userId}'`;
         console.log(sql);
         return executeSql(sql);
     };
 
     findFiles() {
-        const sql = `SELECT PostAttachment, users.userId FROM posts JOIN users ON posts.userId = users.userId WHERE users.userId="${this.userId}"`;
+        const sql = `SELECT PostAttachment, users.userId FROM posts JOIN users ON posts.userId = users.userId WHERE users.userId='${this.userId}'`;
         console.log(sql);
         return executeSql(sql);
     }
 
     deleteOne() {
-        const sql = `DELETE FROM users WHERE userId="${this.userId}"`;
+        const sql = `DELETE FROM users WHERE userId='${this.userId}'`;
         console.log(sql);
         return executeSql(sql);
     }

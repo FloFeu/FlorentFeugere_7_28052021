@@ -25,6 +25,7 @@
           class="form-row__input"
           type="text"
           placeholder="Adresse mail"
+          aria-label="mail address"
         />
       </div>
       <div class="form-row" v-if="mode == 'create'">
@@ -33,12 +34,14 @@
           class="form-row__input"
           type="text"
           placeholder="Prénom"
+          aria-label=" first name"
         />
         <input
           v-model="lastName"
           class="form-row__input"
           type="text"
           placeholder="Nom"
+          aria-label="last name"
         />
       </div>
       <div class="form-row">
@@ -49,6 +52,7 @@
           class="form-row__input"
           type="password"
           placeholder="Mot de passe"
+          aria-label="password"
         />
       </div>
       <div class="form-row" v-if="mode == 'login' && status == 'error_login'">

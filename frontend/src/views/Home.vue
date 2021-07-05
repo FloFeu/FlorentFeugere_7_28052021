@@ -3,7 +3,7 @@
     <Navbar />
     <div class="home">
       <div class="home__infos">
-        <h2>Bonjour {{ user.firstName }}</h2>
+        <h1>Bonjour {{ user.firstName }}</h1>
         <div class="create__post">
           <label for="post">Partagez vos pensées:</label>
           <textarea
@@ -13,6 +13,7 @@
             rows="3"
             placeholder="Aujourd'hui il fait bien beau !"
             v-model="msg"
+            aria-label="message area for post"
           ></textarea>
           <div
             v-if="previewImage"
@@ -31,6 +32,7 @@
               id="post__file"
               name="image"
               @change="onFileSelected"
+              aria-label="file selection"
             />
           </div>
           <button
@@ -43,7 +45,7 @@
         </div>
       </div>
       <div class="home__main">
-        <h1>Fil d'actualité</h1>
+        <h2>Fil d'actualité</h2>
         <div class="line-break"></div>
         <div v-if="posts.length">
           <Post
@@ -245,8 +247,8 @@ export default {
     .line-break {
       @include line-break;
     }
-    h1 {
-      padding: 0 1rem;
+    h2 {
+      padding: 1rem;
     }
     &__warn {
       margin: 2em;

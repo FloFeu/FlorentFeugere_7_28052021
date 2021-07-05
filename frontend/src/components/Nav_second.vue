@@ -4,7 +4,7 @@
     :class="{ sticky: isSticky }"
   >
     <router-link :to="{ name: 'Home' }"
-      ><font-awesome-icon class="icon" :icon="['fas', 'arrow-left']" size="2x"
+      aria-label="Home"><font-awesome-icon class="icon" :icon="['fas', 'arrow-left']" size="2x"
     /></router-link>
     <button
       v-if="this.$route.name == 'EditProfile'"

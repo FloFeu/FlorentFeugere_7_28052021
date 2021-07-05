@@ -71,11 +71,11 @@ body {
     }
   }
   .button--disabled {
-    background: lighten($error, 20%);
+    background: $error;
     color: $white;
     &:hover {
       cursor: not-allowed;
-      background: lighten($error, 20%);
+      background: darken($error, 25%);
     }
   }
 }
