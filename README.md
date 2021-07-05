@@ -22,6 +22,8 @@ Pour lancer le serveur
  - Installer les packages du back avec un `npm install`
  - Renommer le fichier `.env-prod` en `.env`. Ajouter si nécessaire le mot de passe requis à la connexion à votre  serveur MySQL. Le token est laissé volontairement afin de pouvoir se connecter avec l'utilisateur admin créé par mes soins.
  - Lancer le back en faisant `nodemon`
+ 
+[Documentation API](https://documenter.getpostman.com/view/14626848/Tzm2KJUG)
 
 ## :clipboard:  Frontend :clipboard:
 
